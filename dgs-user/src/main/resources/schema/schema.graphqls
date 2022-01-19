@@ -1,0 +1,34 @@
+scalar Upload
+scalar DateTime
+scalar UUID
+
+type Query {
+    # Finds a user by id
+    user(id: UUID): User
+    # Fetches a users, the filter, filters on usernames can be left empty
+    users(usernameFilter: String): [User]
+    # Fetches random users, "howMany" is required and is how many random users you want to fetch. "username"  is required, it used to filter away a user from the response.
+    fetchRandomUsers(howMany: Int!, username: String!): [User]
+
+    userExitsById(id: UUID): Boolean
+    exitsByUsername(username: String): Boolean
+    exitsByEmail(email: String): Boolean
+    exitsByPhone(phone: String): Boolean
+}
+
+type Mutation {
+    # Create a user
+    createUser(createUserInput: CreateUserInput, input: Upload): User
+    # Update user information
+    updateUser(updateUserInput: UpdateUserInput, input: Upload): User
+    # Update password
+    updatePassword(updatePasswordInput: UpdatePasswordInput): Boolean
+    # Authenticate the user
+    authUser(authUserInput: AuthUserInput): User
+    # Delete a user
+    deleteUser(authUserInput: AuthUserInput!): String
+    # Follows a user
+    followUser(followInput: FollowInput): String
+    # UnFollows a user
+    unFollowUser(followInput: FollowInput): String
+}

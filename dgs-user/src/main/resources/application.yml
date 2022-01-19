@@ -1,0 +1,43 @@
+
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:9000/user-db}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:letmein}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL-AUTO:update}
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+  servlet:
+    multipart:
+      max-file-size: 5MB
+
+server:
+  port: 8000
+
+logging:
+  pattern:
+    console: -%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:}){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %clr(%X{execution_id}){red} %m%n%wEx
+graphql:
+  playground:
+    settings:
+      schema:
+        polling:
+          enable: false
+    headers:
+      Authorization: Bearer TOKEN
+      user_id: 1234
+      user_roles: role_user
+#    tabs:
+#      - name: User queries
+#        query: classpath:playground/user.graphql
+#        variables: classpath:playground/user_variables.json
+
+
+image.service.base-url: ${IMAGE_SERVICE_BASE_URL:http://localhost:8001}
+image.max-size: 2
+allowed.origin.url: ${ALLOWED_ORIGIN:http://localhost:3000}
+
+

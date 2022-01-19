@@ -1,0 +1,37 @@
+input CreateUserInput {
+    firstName: String
+    lastName: String
+    phone: String
+    email: String!
+    username: String!
+    password: String!
+    profilePic: String
+}
+
+input UpdateUserInput {
+    userId: UUID!
+    username: String
+    firstName: String
+    lastName: String
+    email: String
+    phone: String
+    description: String
+    profilePic: String
+}
+
+input UpdatePasswordInput {
+    userId: UUID
+    oldPassword: String
+    newPassword: String
+}
+
+input AuthUserInput {
+    userId: UUID
+    username: String!
+    password: String!
+}
+
+input FollowInput {
+    userId: UUID
+    followId: UUID
+}

@@ -1,0 +1,16 @@
+version: "3.3"
+
+services:
+
+  user-db:
+    container_name: user-db
+    image: postgres
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: letmein
+      POSTGRES_DB: user-db
+    expose:
+      - 9000
+    ports:
+      - 9000:5432
+    restart: unless-stopped

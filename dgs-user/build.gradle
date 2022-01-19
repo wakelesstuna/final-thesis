@@ -1,0 +1,49 @@
+plugins {
+    id 'org.springframework.boot' version '2.6.2'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'com.netflix.dgs.codegen' version '5.1.16'
+}
+
+group = 'io.wakelesstuna'
+version = '0.0.1-SNAPSHOT'
+java.sourceCompatibility = JavaVersion.VERSION_11
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation(platform("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release"))
+    implementation "com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter"
+    implementation 'com.netflix.graphql.dgs:graphql-dgs-pagination'
+    implementation 'com.graphql-java:graphql-java-extended-scalars'
+    implementation group: 'com.graphql-java-kickstart', name: 'playground-spring-boot-autoconfigure', version: '11.1.0'
+    implementation 'com.talanlabs:avatar-generator:1.1.0'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'org.postgresql:postgresql'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+generateJava {
+    typeMapping = [
+            "UUID": "java.util.UUID",
+            "DateTime": "java.time.LocalDateTime",
+            "Upload": "com.netflix.graphql.dgs.DgsDataFetchingEnvironment"
+    ]
+    packageName = "io.wakelesstuna.user.generated" // The package name to use to generate sources
+    generateClient = true // Enable generating the type safe query API
+}

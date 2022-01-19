@@ -1,0 +1,37 @@
+type User @key(fields : "id"){
+    # This type holds information about user
+    id: UUID
+    firstName: String
+    lastName: String
+    phone: String
+    email: String
+    username: String
+    password: String
+    profilePic: String
+    description: String
+    createdAt: DateTime
+    totalFollowing: Int
+    following: [User]
+    totalFollowers: Int
+    followers: [User]
+}
+
+# This extends the post type from post-dgs
+type Post @key(fields: "id userId") @extends {
+    id: UUID @external
+    userId: UUID @external
+    user: User # Returns the user that created the post
+    userLikes: [User] # Returns a list of users that liked the post
+}
+
+type Comment @key(fields: "id userId") @extends {
+    id: UUID @external
+    userId: UUID @external
+    user: User
+}
+
+type Story @key(fields: "id userId") @extends {
+    id: UUID @external
+    userId: UUID @external
+    user: User
+}
