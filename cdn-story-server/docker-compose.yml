@@ -1,0 +1,12 @@
+version: "3.3"
+
+services:
+
+  cdn-story-server:
+    container_name: cdn-story-server
+    image: app2
+    ports:
+      - 5000:5000
+    environment:
+      SERVER_BASE_URL: http://localhost:5000
+      MULTIPARTFILE_MAX_SIZE: 20MB

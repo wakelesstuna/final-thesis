@@ -1,0 +1,13 @@
+server:
+  port: 5000
+  base:
+    url: ${SERVER_BASE_URL:http://localhost:5000}
+  error:
+    include-message: always
+spring:
+  http:
+    multipart:
+      enabled: true
+  servlet:
+    multipart:
+      max-file-size: ${MULTIPARTFILE_MAX_SIZE:20MB}
