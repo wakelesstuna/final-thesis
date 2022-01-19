@@ -1,0 +1,24 @@
+server_port: 8005
+
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://0.0.0.0:9003/cdn-image-db}
+    driver-class-name: org.postgresql.Driver
+    username: ${SPRING_DATASOURCE_URL:root}
+    password: ${SPRING_DATASOURCE_URL:letmein}
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL-AUTO:update}
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        enable_lazy_load_no_trans: true
+  servlet:
+    multipart:
+      file-size-threshold: 2MB
+
+image:
+  service:
+    base-url: ${IMAGE_SERVICE_BASE_URL:http://localhost:${server_port}}
+server:
+  port: ${server_port}

@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+
+  cdn-image-db:
+    container_name: cdn-image-db
+    image: postgres:alpine
+    environment:
+      POSTGRES_DB: cdn-image-db
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: letmein
+    ports:
+    - 9003:5432
