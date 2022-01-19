@@ -1,0 +1,17 @@
+{
+  "name": "federation-gateway",
+  "version": "1.0.0",
+  "description": "graphql federation gateway demo app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": " node index.js"
+  },
+  "author": "io.wakelesstuna",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/gateway": "^0.45.0",
+    "apollo-server": "^3.5.0",
+    "graphql": "^15.8.0"
+  }
+}
