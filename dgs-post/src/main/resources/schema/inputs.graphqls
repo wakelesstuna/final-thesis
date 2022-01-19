@@ -1,0 +1,48 @@
+input CreatePostInput {
+    userId: UUID
+    caption: String
+    imageUrl: String
+}
+
+input PostInput {
+    postId: UUID!
+    userId: UUID!
+}
+
+input CreateCommentInput{
+    userId: UUID
+    postId: UUID
+    comment: String
+}
+
+input CommentInput {
+    userId: UUID
+    postId: UUID
+    commentId: UUID
+}
+
+input LikeInput {
+    userId: UUID
+    postId: UUID
+}
+
+input BookmarkInput {
+    postId: UUID!
+    userId: UUID!
+}
+
+
+input PostFilter {
+    userId: UUID
+    postId: UUID
+}
+
+input CreateStoryInput {
+    userId: UUID
+    storyUrl: String
+}
+
+input StoryInput {
+    userId: UUID
+    storyId: UUID
+}

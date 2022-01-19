@@ -1,0 +1,41 @@
+scalar Upload
+scalar DateTime
+scalar UUID
+
+type Query {
+    # Fetches a users, the filter uses user id or post id to filter, can be left empty
+    posts(postFilter: PostFilter): [Post]
+    # Finds a post by id
+    post(postId: UUID): Post
+    # Paginate for posts. first is how many you wanna fetch,
+    # after is a cursor that you set by the cursor you get back from each
+    # edge case, to start from there.
+    paginationPosts(first: Int!, after: String): PostConnection
+    isBookmarked(bookmarkInput: BookmarkInput): Boolean
+    isPostLiked(likeInput:LikeInput): Boolean
+
+    stories: [Story]
+}
+
+type Mutation {
+    # Creates a post
+    createPost(createPostInput: CreatePostInput, input: Upload): Post
+    # Deletes a post
+    deletePost(postInput: PostInput!): Boolean
+    # Likes a post
+    likePost(likeInput: LikeInput): String
+    # Unlikes a post
+    unLikePost(likeInput: LikeInput): String
+    # Bookmarks a post
+    bookmarkPost(bookmarkInput: BookmarkInput): String
+    # Un bookmarks a post
+    unBookmarkPost(bookmarkInput: BookmarkInput): String
+    # Creates a comment for a post
+    createComment(createCommentInput: CreateCommentInput): Comment
+    # Deletes a comment for a post
+    deleteComment(commentInput: CommentInput): String
+    # Creates a story
+    createStory(createStoryInput: CreateStoryInput): Story
+    # Deletes a story
+    deleteStory(storyInput: StoryInput): String
+}

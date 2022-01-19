@@ -1,0 +1,16 @@
+version: "3.3"
+
+services:
+
+  post-db:
+    container_name: post-db
+    image: postgres
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: letmein
+      POSTGRES_DB: post-db
+    expose:
+      - 9001
+    ports:
+      - 9002:5432
+    restart: unless-stopped

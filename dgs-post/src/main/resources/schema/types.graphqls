@@ -1,0 +1,53 @@
+# This type holds information about a post
+type Post @key(fields: "id userId") {
+    id: UUID # Returns Id of the post
+    userId: UUID
+    imageUrl: String # Returns a url string to the image of the post
+    caption: String # Returns the caption of the post
+    totalLikes: Int # Returns the total like of the post
+    totalComments: Int
+    comments: [Comment]
+    createdAt: DateTime
+}
+
+type PostConnection {
+    edges: [PostEdge]
+    pageInfo: PageInfo
+}
+
+type PostEdge {
+    node: Post
+    cursor: String
+}
+
+type PageInfo {
+    hasPreviousPage: Boolean!
+    hasNextPage: Boolean!
+    startCursor: String
+    endCursor: String
+}
+
+type Comment @key(fields: "id userId") {
+    id: UUID
+    userId: UUID
+    postId: UUID
+    comment: String
+    createdAt: DateTime
+}
+
+type Story @key(fields: "id userId") {
+    id: UUID
+    userId: UUID
+    storyUrl: String
+    createdAt: DateTime
+}
+
+# This extends the user type from user-dgs
+type User @key(fields: "id") @extends {
+    id: UUID @external
+    totalBookmarks: Int
+    bookmarks: [Post]
+    totalPosts: Int
+    posts: [Post]
+    stories: [Story]
+}
