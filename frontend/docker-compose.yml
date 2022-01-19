@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  instagram-frontend:
+    container_name: instagram-frontend
+    image: wakelesstuna/instagram-application
+    volumes:
+      - "./:/app"
+      - "/app/node_modules"
+    ports:
+      - 3000:3000
+    stdin_open: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    command: npm run start
