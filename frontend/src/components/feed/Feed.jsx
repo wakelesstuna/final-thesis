@@ -61,9 +61,7 @@ const Feed = () => {
     <MainStyle width={width}>
       <section>
         <List onScroll={onScroll}>
-          <li>
-            <Stories />
-          </li>
+          <Stories />
           <li>{data && <PostsList posts={data.paginationPosts.edges} />}</li>
           <Margin></Margin>
         </List>
@@ -91,15 +89,6 @@ const MainStyle = styled.main`
     width: ${(props) => (props.width > BREAKPOINTS.XL ? "70%" : "825px")};
     margin: ${(props) => (props.width > BREAKPOINTS.XL ? "" : "auto")};
     padding-right: ${(props) => (props.width > BREAKPOINTS.XL ? "2rem" : "")};
-
-    ::-webkit-scrollbar {
-      width: 0; /* Remove scrollbar space */
-      background: transparent; /* Optional: just make scrollbar invisible */
-      /* Optional: show position indicator in red */
-      ::-webkit-scrollbar-thumb {
-        background: #ff0000;
-      }
-    }
   }
   > :last-child {
     width: ${(props) => (props.width > BREAKPOINTS.XL ? "30%" : "825px")};
@@ -122,27 +111,27 @@ const List = styled.ul`
   transform: translateY(-30px);
   padding-top: 30px;
 
-  /* ::-webkit-scrollbar {
-    width: 0; /* Remove scrollbar space */
-  //  background: transparent; /* Optional: just make scrollbar invisible */
-  // }
-  /* Optional: show position indicator in red */
-  /* ::-webkit-scrollbar-thumb {
-    background: #ff0000;
-  } */
-
   ::-webkit-scrollbar {
-    width: 10px;
+    display: none;
+  }
+
+  // To show scroll bar uncomment this
+  /* ::-webkit-scrollbar {
+    
+    width: 12px;
   }
 
   ::-webkit-scrollbar-track {
-    background-color: red;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color: wheat;
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  }
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+  } */
 `;
 
 const Margin = styled.div`

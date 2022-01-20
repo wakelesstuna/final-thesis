@@ -5,7 +5,7 @@ import { MODAL_TYPE } from "../../../constants";
 // Components
 import ModalContainer from "../../modal/ModalContainer";
 
-const Story = ({ user }) => {
+const Story = ({ user, story }) => {
   return (
     <StoryStyle>
       <ModalContainer
@@ -21,6 +21,7 @@ const Story = ({ user }) => {
         overlayColor={"#242424"}
         modalBackground={"transparent"}
         typeOfModal={MODAL_TYPE.STORY}
+        obj={story}
       ></ModalContainer>
       <UsernameStyle>{user.username}</UsernameStyle>
     </StoryStyle>
@@ -29,14 +30,14 @@ const Story = ({ user }) => {
 
 export default Story;
 
-const StoryStyle = styled.div`
+const StoryStyle = styled.li`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-width: 90px;
   max-width: 90px;
-  margin: 0.5rem 0;
+  margin-top: 0.5rem;
 `;
 
 const StoryButtonStyle = styled.div`

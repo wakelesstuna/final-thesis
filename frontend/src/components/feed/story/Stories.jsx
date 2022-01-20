@@ -2,26 +2,54 @@
 import styled from "styled-components";
 // Components
 import Story from "./Story";
-// Test data
-import { users } from "../../../test__data/users";
+// GraphQL
+import { useQuery } from "@apollo/client";
+import { fetchUsersOfStories_gql } from "../../../graphql/query";
+// Components
+import ErrorSwalMessage from "../../util/ErrorSwalMessage";
 
 const Stories = () => {
-  // Load stories from database
-  const stories = users;
+  const { data, loading, error } = useQuery(fetchUsersOfStories_gql);
+
+  if (loading) return <div>Loading stories</div>;
+  if (error) return <ErrorSwalMessage error={error} />;
+
   return (
     <StoriesStyle>
-      {stories && stories.map((user) => <Story key={user.id} user={user} />)}
+      <ul>
+        {data &&
+          data.stories.map((story) => (
+            <Story key={story.id} story={story} user={story.user} />
+          ))}
+      </ul>
     </StoriesStyle>
   );
 };
 
 export default Stories;
 
-const StoriesStyle = styled.div`
-  display: flex;
+const StoriesStyle = styled.li`
+  height: 110px;
+  position: relative;
   border: 1px solid #adadadc5;
   margin-bottom: 1.6rem;
-  overflow-x: scroll;
   width: 100%;
   overflow-x: scroll;
+
+  ::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: #e4e4e4;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #a3a3a3;
+    border-radius: 100px;
+  }
+
+  ul {
+    display: flex;
+  }
 `;

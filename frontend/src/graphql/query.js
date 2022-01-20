@@ -192,3 +192,17 @@ export const exitsByUsername_gql = gql`
     exitsByUsername(username: $username)
   }
 `;
+
+export const fetchUsersOfStories_gql = gql`
+  query FetchUsersOfStories {
+    stories {
+      id
+      storyUrl
+      user {
+        id
+        username
+        profilePic
+      }
+    }
+  }
+`;

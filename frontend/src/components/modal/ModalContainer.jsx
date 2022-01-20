@@ -82,7 +82,7 @@ const ModalContainer = ({
           <CreatePostModal closeModal={closeModal} />
         ) : null}
         {typeOfModal === MODAL_TYPE.STORY ? (
-          <StoryModal closeModal={closeModal} />
+          <StoryModal closeModal={closeModal} story={obj} />
         ) : null}
         {typeOfModal === MODAL_TYPE.FOLLOWERS ? (
           <FollowersModal closeModal={closeModal} type={MODAL_TYPE.FOLLOWERS} />
