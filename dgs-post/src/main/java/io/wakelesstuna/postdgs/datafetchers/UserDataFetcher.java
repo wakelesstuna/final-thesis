@@ -66,11 +66,11 @@ public class UserDataFetcher {
         return dataLoader.load(user.getId());
     }
 
-    @DgsData(parentType = DgsConstants.STORY.TYPE_NAME, field = DgsConstants.USER.Stories)
+    @DgsData(parentType = DgsConstants.USER.TYPE_NAME, field = DgsConstants.USER.Stories)
     public CompletableFuture<Story> stories(DgsDataFetchingEnvironment dfe) {
         DataLoader<UUID, Story> dataloader = dfe.getDataLoader(StoriesDataLoader.class);
-        Story story = dfe.getSource();
-        return dataloader.load(story.getId());
+        User user = dfe.getSource();
+        return dataloader.load(user.getId());
     }
 
 }
