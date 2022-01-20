@@ -1,11 +1,14 @@
 // React
-import { useEffect, useState } from "react";
+import { useState } from "react";
 // Recoil
 import { useRecoilState, useRecoilValue } from "recoil";
 import { atomCurrentFile, atomUser } from "../../atom/atomStates";
 // GraphQL
 import { useMutation } from "@apollo/client";
-import { createPostMutation_gql } from "../../graphql/mutation";
+import {
+  createPostMutation_gql,
+  createStory_gql,
+} from "../../graphql/mutation";
 // Style
 import styled from "styled-components";
 // Components
@@ -14,7 +17,7 @@ import CreatePost from "./content/CreatePost";
 import useFocus from "../../hooks/useFocus";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { uploadIamge } from "../util/utilFunctions";
+import { uploadImage, uploadVideo } from "../util/utilFunctions";
 import CreateStory from "./content/CreateStory";
 
 const CreatePostModal = ({ closeModal }) => {
@@ -26,6 +29,7 @@ const CreatePostModal = ({ closeModal }) => {
   const [inputRef, setInputFocus] = useFocus();
   const MySwal = withReactContent(Swal);
   const [createPostMutation] = useMutation(createPostMutation_gql);
+  const [createStoryMutation] = useMutation(createStory_gql);
 
   const fileSelected = (e) => {
     const selectedFile = e.target.files[0];
@@ -38,8 +42,19 @@ const CreatePostModal = ({ closeModal }) => {
   };
 
   const handlePost = async () => {
-    const caption = inputRef.current.value;
-    const resp = await uploadIamge(user.id, currentFile);
+    const caption = inputRef.current?.value;
+    let resp;
+    if (fileType.startsWith("image")) {
+      resp = await uploadImage(user.id, currentFile);
+      uploadPost(resp, caption);
+    }
+    if (fileType.startsWith("video")) {
+      resp = await uploadVideo(user.id, currentFile);
+      uploadStory(resp);
+    }
+  };
+
+  const uploadPost = async (resp, caption) => {
     try {
       const response = await createPostMutation({
         variables: {
@@ -62,14 +77,31 @@ const CreatePostModal = ({ closeModal }) => {
     }
   };
 
-  useEffect(() => {
-    console.log("File type", fileType);
-  }, [fileType]);
+  const uploadStory = async (resp) => {
+    try {
+      const response = await createStoryMutation({
+        variables: {
+          createStoryInput: {
+            storyUrl: resp.data,
+            userId: user.id,
+          },
+        },
+      });
+
+      if (response.data) {
+        window.location.reload(false);
+        closeModal();
+      }
+    } catch (e) {
+      console.log({ e });
+      console.log(e.message);
+    }
+  };
 
   return (
     <ModalStyle>
       <Header>
-        Create a new post{" "}
+        {fileType.startsWith("video") ? "Upload video" : "Create a new post"}
         {isFile ? <PostButton onClick={handlePost}>Post</PostButton> : null}
       </Header>
       <Content>
@@ -82,7 +114,7 @@ const CreatePostModal = ({ closeModal }) => {
             setInputFocus={setInputFocus}
           />
         ) : (
-          <CreateStory />
+          <CreateStory file={currentFile} />
         )}
       </Content>
     </ModalStyle>

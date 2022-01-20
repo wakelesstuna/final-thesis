@@ -1,8 +1,17 @@
 // Styles
 import styled from "styled-components";
 
-const CreateStory = () => {
-  return <CreateStoryStyle>Story!</CreateStoryStyle>;
+const CreateStory = ({ file }) => {
+  const binaryData = [];
+  binaryData.push(file);
+  const video = URL.createObjectURL(
+    new Blob(binaryData, { type: "application/zip" })
+  );
+  return (
+    <CreateStoryStyle>
+      <video width='500' height='750' src={video} controls />
+    </CreateStoryStyle>
+  );
 };
 
 export default CreateStory;

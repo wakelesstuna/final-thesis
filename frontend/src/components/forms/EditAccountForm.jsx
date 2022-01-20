@@ -9,7 +9,8 @@ import { atomUser } from "../../atom/atomStates";
 // Styles
 import styled from "styled-components";
 import { ButtonStyle } from "../../styles/layout";
-import { uploadIamge } from "../util/utilFunctions";
+// Utils
+import { uploadImage } from "../util/utilFunctions";
 
 const EditAccountForm = ({ file }) => {
   const [user, setUser] = useRecoilState(atomUser);
@@ -30,7 +31,7 @@ const EditAccountForm = ({ file }) => {
     console.log("Sending updates to server!");
     let resp;
     if (file !== undefined) {
-      resp = await uploadIamge(user.id, file);
+      resp = await uploadImage(user.id, file);
     }
 
     const updates = {

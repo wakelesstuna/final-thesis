@@ -11,14 +11,33 @@ export const formatNumber = (number) => {
   });
 };
 
-export const uploadIamge = async (userId, file) => {
+export const uploadImage = async (userId, file) => {
   let response;
   const formData = new FormData();
 
   formData.append("file", file, file?.name);
 
   await axios
-    .post(`http://localhost:8005/cdn/server/v1/upload/${userId}`, formData, {
+    .post(`${process.env.REACT_APP_IMAGE_UPLOAD_URL}${userId}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((resp) => {
+      response = resp;
+    });
+
+  return response;
+};
+
+export const uploadVideo = async (userId, file) => {
+  let response;
+  const formData = new FormData();
+
+  formData.append("file", file, file?.name);
+
+  await axios
+    .post(`${process.env.REACT_APP_STORY_UPLOAD_URL}${userId}`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

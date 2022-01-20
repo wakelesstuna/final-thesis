@@ -123,3 +123,16 @@ export const unbookmarkPost_gql = gql`
     unBookmarkPost(bookmarkInput: $bookmarkInput)
   }
 `;
+
+export const createStory_gql = gql`
+  mutation CreateStory($createStoryInput: CreateStoryInput) {
+    createStory(createStoryInput: $createStoryInput) {
+      id
+      userId
+      storyUrl
+      user {
+        username
+      }
+    }
+  }
+`;
