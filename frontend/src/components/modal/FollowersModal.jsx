@@ -63,6 +63,7 @@ const FollowersModal = ({ type, closeModal }) => {
           listOfUsers={followList}
           refetchList={refetch}
           type={type}
+          closeModal={closeModal}
         />
       )}
     </div>

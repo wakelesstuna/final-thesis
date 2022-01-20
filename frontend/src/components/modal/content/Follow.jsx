@@ -11,7 +11,7 @@ import styled from "styled-components";
 // Constants
 import { MODAL_TYPE } from "../../../constants";
 
-const Follow = ({ follower, type, refetchUser, refetchList }) => {
+const Follow = ({ follower, type, refetchUser, refetchList, closeModal }) => {
   const navigate = useNavigate();
   const { profileId } = useParams();
   const user = useRecoilValue(atomUser);
@@ -22,6 +22,7 @@ const Follow = ({ follower, type, refetchUser, refetchList }) => {
   };
 
   const handleUsernamePress = (followerId) => {
+    closeModal();
     navigate(`/profile/${followerId}`);
   };
 

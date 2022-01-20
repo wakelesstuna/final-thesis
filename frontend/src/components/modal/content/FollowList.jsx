@@ -11,7 +11,7 @@ import styled from "styled-components";
 // Components
 import Follow from "./Follow";
 
-const FollowList = ({ listOfUsers, refetchList, type }) => {
+const FollowList = ({ listOfUsers, refetchList, type, closeModal }) => {
   const [user, setUser] = useRecoilState(atomUser);
 
   const { loading, error, data, refetch } = useQuery(getUserById_gql, {
@@ -34,6 +34,7 @@ const FollowList = ({ listOfUsers, refetchList, type }) => {
             refetchList={refetchList}
             refetchUser={refetch}
             type={type}
+            closeModal={closeModal}
           />
         ))}
     </FollowListStyle>
