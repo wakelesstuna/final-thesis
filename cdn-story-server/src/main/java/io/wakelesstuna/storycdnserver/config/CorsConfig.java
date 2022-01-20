@@ -1,4 +1,4 @@
-package io.wakelesstuna.imagecdnserver.config;
+package io.wakelesstuna.storycdnserver.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
