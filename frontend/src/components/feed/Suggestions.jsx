@@ -55,5 +55,5 @@ const SuggestionStyle = styled.div`
 const TextStyle = styled.p`
   padding-left: 1rem;
   padding-bottom: 0.5rem;
-  color: #cdcdcd;
+  color: #808080;
 `;

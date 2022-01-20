@@ -27,9 +27,9 @@ const UserMiniProfile = () => {
         <p>
           <span>{user?.username}</span>
         </p>
-        <p>
+        <TextFamilyName>
           {user?.firstName} {user?.firstName}
-        </p>
+        </TextFamilyName>
       </TextInfo>
       <div>
         <button onClick={handleLogOut}>Log out</button>
@@ -88,4 +88,8 @@ const TextInfo = styled.div`
     font-weight: 200;
     font-size: 0.8rem;
   }
+`;
+
+const TextFamilyName = styled.p`
+  color: #808080;
 `;

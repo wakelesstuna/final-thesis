@@ -141,5 +141,5 @@ const TextInfo = styled.div`
 `;
 
 const TextFamilyName = styled.p`
-  color: #cdcdcd;
+  color: #808080;
 `;
