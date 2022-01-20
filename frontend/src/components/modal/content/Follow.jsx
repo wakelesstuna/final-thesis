@@ -15,9 +15,6 @@ const Follow = ({ follower, type, refetchUser, refetchList }) => {
   const navigate = useNavigate();
   const { profileId } = useParams();
   const user = useRecoilValue(atomUser);
-  console.log("ProfileId: ", profileId);
-  console.log("UserId: ", user.id);
-
   const [unFollow] = useMutation(unFollowUser_gql);
 
   const formatUserFamilyName = (follower) => {
