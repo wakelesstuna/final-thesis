@@ -15,6 +15,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(AppConstants.VIDEO_RESOURCE_MAPPING)
+@CrossOrigin("*")
 public class VideoResource {
 
     private final VideoService videoService;
