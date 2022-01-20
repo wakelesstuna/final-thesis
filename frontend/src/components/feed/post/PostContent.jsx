@@ -14,6 +14,7 @@ export default PostContent;
 const PostContentStyle = styled.div`
   width: 100%;
   height: fit-content;
+  min-height: 300px;
   max-height: 700px;
   img {
     width: 100%;
