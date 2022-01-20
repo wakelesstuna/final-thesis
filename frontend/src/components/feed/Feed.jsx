@@ -5,6 +5,9 @@ import { getPosts_gql } from "../../graphql/query";
 import styled from "styled-components";
 // Constants
 import { BREAKPOINTS } from "../../constants";
+// Icons
+import { BiCopyright } from "react-icons/bi";
+import { AiOutlineGithub } from "react-icons/ai";
 // Components
 import UserMiniProfile from "./UserMiniProfile";
 import ErrorSwalMessage from "../util/ErrorSwalMessage";
@@ -14,6 +17,7 @@ import Stories from "./story/Stories";
 import Suggestions from "./Suggestions";
 // Util
 import useWindowSize from "../../hooks/useWindowSize";
+import { handleGitHub } from "../util/utilFunctions";
 
 const Feed = () => {
   const { width } = useWindowSize();
@@ -71,6 +75,16 @@ const Feed = () => {
           <SideMenuStyle>
             <UserMiniProfile />
             <Suggestions />
+
+            <LinkStyles>
+              About • Help • Press • API • Jobs • Privacy • Terms • Locations
+              •Top •Accounts •Hashtags • Language • English
+            </LinkStyles>
+            <CopyRightWrapper>
+              <BiCopyright />
+              <p>Copyright 2021 Oscar Forss Final Thesis Instagram Clone </p>
+              <GitHubIcon onClick={handleGitHub} />
+            </CopyRightWrapper>
           </SideMenuStyle>
         </section>
       ) : null}
@@ -136,4 +150,24 @@ const List = styled.ul`
 
 const Margin = styled.div`
   min-height: 200px;
+`;
+
+const LinkStyles = styled.p`
+  margin-top: 1rem;
+  color: #d6d6d6;
+  font-size: 0.7rem;
+  font-weight: 300;
+  cursor: pointer;
+`;
+
+const CopyRightWrapper = styled(LinkStyles)`
+  display: flex;
+  justify-content: center;
+  cursor: default;
+`;
+
+const GitHubIcon = styled(AiOutlineGithub)`
+  margin-left: 1rem;
+  font-size: 2rem;
+  cursor: pointer;
 `;

@@ -35,6 +35,7 @@ const StoriesStyle = styled.li`
   margin-bottom: 1.6rem;
   width: 100%;
   overflow-x: scroll;
+  border-radius: 3px;
 
   ::-webkit-scrollbar {
     height: 8px;

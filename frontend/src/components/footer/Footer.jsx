@@ -3,10 +3,10 @@ import { BiCopyright } from "react-icons/bi";
 import { AiOutlineGithub } from "react-icons/ai";
 // Styles
 import styled from "styled-components";
+// Util
+import { handleGitHub } from "../util/utilFunctions";
 
 const Footer = () => {
-  const handleGitHub = () => {};
-
   return (
     <Container>
       <InfoChoice className='flex space-x-4 flex-wrap text-sm text-gray-400 text-center justify-center mx-[10%] m-auto mt-16 childsCursorPointer childsHoverUnderline'>
@@ -31,7 +31,7 @@ const Footer = () => {
       </InfoChoice>
       <CopyRightContainer>
         <BiCopyright />
-        <p>Copyright 2021 Oscar Forss Master Thesis Instagram Clone </p>
+        <p>Copyright 2021 Oscar Forss Final Thesis Instagram Clone </p>
         <GitHubIcon onClick={handleGitHub} />
       </CopyRightContainer>
     </Container>

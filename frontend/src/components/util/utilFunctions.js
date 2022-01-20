@@ -11,6 +11,10 @@ export const formatNumber = (number) => {
   });
 };
 
+export const handleGitHub = () => {
+  window.open("https://github.com/wakelesstuna/final-thesis", "_blank");
+};
+
 export const uploadImage = async (userId, file) => {
   let response;
   const formData = new FormData();
