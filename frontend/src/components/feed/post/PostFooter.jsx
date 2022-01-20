@@ -13,7 +13,7 @@ const PostFooter = ({ post, showAll }) => {
   return (
     <>
       <PostFooterStyle>
-        <Symbols postId={post.id} setTotalLikes={setTotalLikes} />
+        <Symbols post={post} setTotalLikes={setTotalLikes} />
         <Likes totalLikes={totalLikes} />
         <Content user={post.user} content={post.caption} />
         <CommentSection post={post} showAll={showAll} />

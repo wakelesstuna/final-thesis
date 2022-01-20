@@ -9,8 +9,10 @@ import { IoPaperPlaneOutline } from "react-icons/io5";
 // Components
 import BookmarkSymbol from "./BookmarkSymbol";
 import LikeSymbol from "./LikeSymbol";
+import ModalContainer from "../../../modal/ModalContainer";
+import { MODAL_TYPE } from "../../../../constants";
 
-const Symbols = ({ postId, setTotalLikes }) => {
+const Symbols = ({ post, setTotalLikes }) => {
   const { id } = useRecoilValue(atomUser);
 
   return (
@@ -18,21 +20,29 @@ const Symbols = ({ postId, setTotalLikes }) => {
       <div>
         <button>
           <LikeSymbol
-            postId={postId}
+            postId={post.id}
             userId={id}
             setTotalLikes={setTotalLikes}
           />
         </button>
-        <button>
-          <BsChat />
-        </button>
+        <ModalContainer
+          typeOfModal={MODAL_TYPE.POST}
+          contentLabel={"post"}
+          buttonContent={
+            <button>
+              <BsChat />
+            </button>
+          }
+          style={{}}
+          obj={post}
+        />
         <button>
           <IoPaperPlaneOutline />
         </button>
       </div>
       <div>
         <button>
-          <BookmarkSymbol postId={postId} userId={id} />
+          <BookmarkSymbol postId={post.id} userId={id} />
         </button>
       </div>
     </SymbolsStyle>
