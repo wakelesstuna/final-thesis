@@ -2,3 +2,6 @@
 /federation-gateway/.idea
 /frontend/node_modules
 
+/cdn-story-server/*.txt
+/cdn-story-server/gradlew
+/cdn-story-server/gradlew.bat
