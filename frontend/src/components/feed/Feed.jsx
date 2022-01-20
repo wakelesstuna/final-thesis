@@ -65,6 +65,7 @@ const Feed = () => {
             <Stories />
           </li>
           <li>{data && <PostsList posts={data.paginationPosts.edges} />}</li>
+          <Margin></Margin>
         </List>
       </section>
       {width > BREAKPOINTS.XL ? (
@@ -113,6 +114,7 @@ const SideMenuStyle = styled.div`
 `;
 
 const List = styled.ul`
+  height: 92vh;
   max-height: 92vh;
   overflow-y: scroll;
   max-width: 600px;
@@ -141,4 +143,8 @@ const List = styled.ul`
     background-color: wheat;
     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   }
+`;
+
+const Margin = styled.div`
+  min-height: 200px;
 `;
