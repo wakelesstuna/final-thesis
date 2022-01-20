@@ -28,7 +28,7 @@ const Suggestions = () => {
 
   return (
     <SuggestionStyle>
-      <p>Suggestions</p>
+      <TextStyle>Suggestions</TextStyle>
       {data &&
         data.map(({ id, username, profilePic, followers }) => (
           <MiniProfile
@@ -46,12 +46,14 @@ const Suggestions = () => {
   );
 };
 
+export default Suggestions;
+
 const SuggestionStyle = styled.div`
   padding-top: 1rem;
-  > :first-child {
-    padding-left: 1rem;
-    padding-bottom: 0.5rem;
-  }
 `;
 
-export default Suggestions;
+const TextStyle = styled.p`
+  padding-left: 1rem;
+  padding-bottom: 0.5rem;
+  color: #cdcdcd;
+`;

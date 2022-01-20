@@ -76,7 +76,7 @@ const MiniProfile = ({
         <p>
           <span>{username}</span>
         </p>
-        <p>oasdf</p>
+        <TextFamilyName>oasdf</TextFamilyName>
       </TextInfo>
       <div>
         <button onClick={(e) => handleFollow(e, currentUserId, userId)}>
@@ -138,4 +138,8 @@ const TextInfo = styled.div`
     font-weight: 200;
     font-size: 0.8rem;
   }
+`;
+
+const TextFamilyName = styled.p`
+  color: #cdcdcd;
 `;
