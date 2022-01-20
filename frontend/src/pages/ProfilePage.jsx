@@ -40,10 +40,7 @@ const ProfilePage = () => {
             <ProfileHeader user={data.user} />
           </div>
           <div>
-            <ProfileContent
-              currentPath={currentPath}
-              profileId={profileId} /* posts={data.user.posts} */
-            />
+            <ProfileContent currentPath={currentPath} profileId={profileId} />
           </div>{" "}
         </>
       ) : null}

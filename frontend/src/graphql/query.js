@@ -206,3 +206,15 @@ export const fetchUsersOfStories_gql = gql`
     }
   }
 `;
+
+export const fetchStoriesForUser_gql = gql`
+  query User($id: UUID!) {
+    user(id: $id) {
+      stories {
+        id
+        storyUrl
+        createdAt
+      }
+    }
+  }
+`;

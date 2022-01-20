@@ -76,7 +76,7 @@ const ModalContainer = ({
           <PostOptionModal closeModal={closeModal} />
         ) : null}
         {typeOfModal === MODAL_TYPE.USER_POST_OPTION ? (
-          <PostUserOptionModal postId={obj} closeModal={closeModal} />
+          <PostUserOptionModal post={obj} closeModal={closeModal} />
         ) : null}
         {typeOfModal === MODAL_TYPE.CREATE_POST ? (
           <CreatePostModal closeModal={closeModal} />

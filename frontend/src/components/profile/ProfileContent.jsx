@@ -14,6 +14,7 @@ import { BiUserPin } from "react-icons/bi";
 import ErrorMessage from "../util/ErrorMessage";
 import BookmarkList from "./BookmarkList";
 import UserPostsList from "./UserPostsList";
+import VideoList from "./VideoList";
 
 const ProfileContent = ({ currentPath, profileId }) => {
   const { id } = useRecoilValue(atomUser);
@@ -72,7 +73,7 @@ const ProfileContent = ({ currentPath, profileId }) => {
         {choice === PROFILE_CHOICE.POSTS && (
           <UserPostsList profileId={profileId} />
         )}
-        {choice === PROFILE_CHOICE.VIDEOS && <ErrorMessage />}
+        {choice === PROFILE_CHOICE.VIDEOS && <VideoList />}
         {choice === PROFILE_CHOICE.SAVED && <BookmarkList />}
         {choice === PROFILE_CHOICE.TAGGED && <ErrorMessage />}
       </div>

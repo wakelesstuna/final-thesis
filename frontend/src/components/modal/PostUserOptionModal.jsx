@@ -12,9 +12,12 @@ import {
 const PostUserOptionModal = ({ closeModal, postId }) => {
   const { id } = useRecoilValue(atomUser);
   const [deletePostMutation] = useMutation(deletePostMutation_gql);
-
+  console.log("User id: ", id);
+  console.log("User post: ", postId);
   const handleDeletePost = async () => {
-    try {
+    console.log("User id: ", id);
+    console.log("User post: ", postId);
+    /* try {
       const response = await deletePostMutation({
         variables: {
           postInput: {
@@ -25,17 +28,17 @@ const PostUserOptionModal = ({ closeModal, postId }) => {
       });
 
       if (response.data) {
-        window.location.reload(false);
+        //window.location.reload(false);
         closeModal();
       }
     } catch (e) {
       console.log({ e });
-    }
+    } */
   };
 
   return (
     <PostOptionModalStyle>
-      <div onClick={handleDeletePost}>
+      <div onClick={() => handleDeletePost()}>
         <PostOptionModalRedText>Delete Post</PostOptionModalRedText>
       </div>
       <div onClick={closeModal}>
