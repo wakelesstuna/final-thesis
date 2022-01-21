@@ -5,6 +5,7 @@ import com.netflix.graphql.types.errors.ErrorType;
 import com.talanlabs.avatargenerator.Avatar;
 import com.talanlabs.avatargenerator.GitHubAvatar;
 import com.talanlabs.avatargenerator.layers.backgrounds.ColorPaintBackgroundLayer;
+import graphql.GraphQLException;
 import io.wakelesstuna.postdgs.exceptions.MyCustomException;
 import io.wakelesstuna.postdgs.exceptions.PostNotFoundException;
 import io.wakelesstuna.postdgs.persistance.PostEntity;
@@ -48,10 +49,10 @@ public class ServiceHelper {
     private final String IMAGE_SERVICE_UPLOAD_FILE_RESOURCE = "/cdn/server/v1/upload";
     private final String IMAGE_SERVICE_DELETE_FILE_RESOURCE = "/cdn/server/v1/delete";
 
-    public ServiceHelper(Clock clock, PostRepository postRepo, @Value("${image.service.base-url}") String imageServiceBaseUrl) {
+    public ServiceHelper(Clock clock, PostRepository postRepo, @Value("${image.service.base-url}") String imageServiceBaseUrl, RestTemplate restTemplate) {
         this.clock = clock;
         this.postRepo = postRepo;
-        this.restTemplate = new RestTemplate();
+        this.restTemplate = restTemplate;
         this.imageServiceBaseUrl = imageServiceBaseUrl;
     }
 
@@ -94,7 +95,7 @@ public class ServiceHelper {
         } catch (ResourceAccessException e) {
             final String errorMsg = "Service unavailable, could not upload image";
             log.error(errorMsg);
-            return "";
+            throw new GraphQLException(errorMsg);
         } catch (IOException ioException) {
             return "";
         }
@@ -102,18 +103,19 @@ public class ServiceHelper {
     }
 
     public String deleteImage(PostEntity post) {
-        ResponseEntity<String> response = null;
+        ResponseEntity<String> response;
 
         final String urlForImageService = buildDeleteUrl(post);
         log.info("Image service uri: {}", urlForImageService);
 
         try {
             response = restTemplate.postForEntity(urlForImageService, null, String.class);
+            return response.getBody();
         } catch (ResourceAccessException e) {
             final String errorMsg = "Service unavailable, could not delete image";
             log.error(errorMsg);
+            return errorMsg;
         }
-        return response.getBody();
     }
 
 
@@ -158,16 +160,6 @@ public class ServiceHelper {
                 .httpStatus(HttpStatus.BAD_REQUEST)
                 .errorType(ErrorType.BAD_REQUEST)
                 .build());
-    }
-
-    /**
-     * Check if a value is null returns true if value is null.
-     *
-     * @param value Object to check if null
-     * @return boolean
-     */
-    public boolean checkIfValueIsNull(Object value) {
-        return value == null;
     }
 
     public boolean postExists(UUID postId) {
