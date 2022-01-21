@@ -214,7 +214,7 @@ class ServiceHelperTest {
 
     @Test
     void shouldGenerateAvatarImageFileIfFileIsNull() {
-        
+
         when(restTemplate.postForEntity(anyString(), any(), any()))
                 .thenReturn(ResponseEntity.ok(HttpStatus.ACCEPTED.toString()));
 
