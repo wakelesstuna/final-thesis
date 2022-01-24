@@ -67,7 +67,7 @@ const DropDownMenu = ({ component }) => {
                 </Link>
               </Menu.Item>
               <Menu.Item>
-                <button>
+                <button onClick={handleLogOut}>
                   <BsArrowRepeat />
                   <p>Switch accounts</p>
                 </button>

@@ -1,5 +1,5 @@
 // React
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useWindowSize from "../../hooks/useWindowSize";
 // Recoil
@@ -40,6 +40,8 @@ const NavBar = () => {
     if (!accountMenu) return;
     return <AccountLinks />;
   };
+
+  useEffect(() => {}, [user]);
 
   return (
     <HeaderStyle>
