@@ -27,4 +27,5 @@ export default PostFooter;
 const PostFooterStyle = styled.div`
   display: flex;
   flex-direction: column;
+  border-top: 1px solid #adadadc5;
 `;
