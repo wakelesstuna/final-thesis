@@ -125,11 +125,14 @@ public class UserService {
             userToUpdate.setDescription(input.getDescription());
             log.info("Updating description");
         }
+
         if (file != null) {
             serviceHelper.checkIfImageSize(file.getSize());
             final String imageUrl = serviceHelper.uploadImage(userToUpdate.getId(), file);
             userToUpdate.setProfilePic(imageUrl);
             log.info("Updating user profile pic");
+        }else {
+            userToUpdate.setProfilePic(input.getProfilePic());
         }
 
         userRepo.saveAndFlush(userToUpdate);

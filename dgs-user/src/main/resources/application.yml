@@ -1,7 +1,7 @@
 
 spring:
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:9000/user-db}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/user}
     username: ${SPRING_DATASOURCE_USERNAME:root}
     password: ${SPRING_DATASOURCE_PASSWORD:letmein}
     driver-class-name: org.postgresql.Driver
@@ -36,7 +36,7 @@ graphql:
 #        variables: classpath:playground/user_variables.json
 
 
-image.service.base-url: ${IMAGE_SERVICE_BASE_URL:http://localhost:8001}
+image.service.base-url: ${IMAGE_SERVICE_BASE_URL:http://localhost:8005}
 image.max-size: 2
 allowed.origin.url: ${ALLOWED_ORIGIN:http://localhost:3000}
 

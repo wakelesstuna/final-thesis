@@ -42,7 +42,7 @@ public class ServiceHelper {
 
     @Value("${image.service.base-url}")
     private String imageServiceBaseUrl;
-    private final String IMAGE_SERVICE_UPLOAD_FILE_RESOURCE = "/image-service/api/v1/upload";
+    private final String IMAGE_SERVICE_UPLOAD_FILE_RESOURCE = "/cdn/server/v1/upload";
     @Value("${image.max-size}")
     private Long maxImageSize = 2L;
 
@@ -89,9 +89,11 @@ public class ServiceHelper {
             final String errorMsg = "Service unavailable, could not upload image";
             log.error(errorMsg);
             return "";
-        } catch (IOException ioException) {
+        } catch (IOException e) {
+            e.printStackTrace();
             return "";
         }
+        log.info("Image ur: {}", answer.getBody());
         return answer.getBody();
     }
 
