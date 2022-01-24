@@ -8,6 +8,7 @@ import DiscoverImagesOne from "../components/discoverImages/DiscoverImagesOne";
 import DiscoverImagesThree from "../components/discoverImages/DiscoverImagesThree";
 import DiscoverImagesTwo from "../components/discoverImages/DiscoverImagesTwo";
 import ErrorSwalMessage from "../components/util/ErrorSwalMessage";
+import LoadingDots from "../components/util/LoadingDots";
 
 const DiscoverPage = () => {
   const { data, error, loading, fetchMore } = useQuery(getPosts_gql, {
@@ -18,7 +19,7 @@ const DiscoverPage = () => {
   });
 
   if (error) return <ErrorSwalMessage error={error} />;
-  if (loading || !data) return <div>Loading....</div>;
+  if (loading || !data) return <LoadingDots />;
 
   const arrOfPosts = data.paginationPosts.edges.map((edge) => edge.node);
 
