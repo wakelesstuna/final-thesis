@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 // GraphQL
 import { useMutation, useQuery } from "@apollo/client";
-import { createUserMutation_gql } from "../../graphql/mutation";
+import { createUserMutation_gql, updateUser_gql } from "../../graphql/mutation";
 // Styles
 import styled from "styled-components";
 import { ButtonStyle } from "../../styles/layout";
@@ -20,6 +20,7 @@ import {
 // SweetAlert
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
+import { uploadImage } from "../util/utilFunctions";
 
 const SignUpForm = () => {
   const [isSubmitting, setIsSubmiting] = useState(false);
@@ -28,6 +29,7 @@ const SignUpForm = () => {
   const MySwal = withReactContent(Swal);
   const naviagte = useNavigate();
   const [createUserMutation] = useMutation(createUserMutation_gql);
+  const [setImageUrl] = useMutation(updateUser_gql);
 
   const handleFileSelect = () => {
     const file = fileInput.files[0];
@@ -37,11 +39,12 @@ const SignUpForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmiting(true);
-    const formData = Object.fromEntries(new FormData(e.target).entries());
+    const form = e.target;
+    const formData = Object.fromEntries(new FormData(form).entries());
+
     try {
-      await createUserMutation({
+      const resp = await createUserMutation({
         variables: {
-          input: fileInput.files[0],
           createUserInput: {
             username: formData.username,
             firstName: formData.firstName,
@@ -49,6 +52,21 @@ const SignUpForm = () => {
             phone: formatPhoneNumber(formData.phone),
             email: formData.email,
             password: formData.password,
+          },
+        },
+      });
+
+      const imageResponse = await uploadImage(
+        resp.data.createUser.id,
+        fileInput.files[0]
+      );
+
+      await setImageUrl({
+        variables: {
+          input: null,
+          updateUserInput: {
+            userId: resp.data.createUser.id,
+            profilePic: imageResponse.data,
           },
         },
       });
