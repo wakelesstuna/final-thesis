@@ -19,6 +19,7 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { uploadImage, uploadVideo } from "../util/utilFunctions";
 import CreateStory from "./content/CreateStory";
+import ErrorSwalMessage from "../util/ErrorSwalMessage";
 
 const CreatePostModal = ({ closeModal }) => {
   const user = useRecoilValue(atomUser);
@@ -49,7 +50,12 @@ const CreatePostModal = ({ closeModal }) => {
       uploadPost(resp, caption);
     }
     if (fileType.startsWith("video")) {
-      resp = await uploadVideo(user.id, currentFile);
+      try {
+        resp = await uploadVideo(user.id, currentFile);
+      } catch (e) {
+        <ErrorSwalMessage error={e} />;
+      }
+
       uploadStory(resp);
     }
   };
