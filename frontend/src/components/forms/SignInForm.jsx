@@ -36,12 +36,14 @@ const SignInForm = () => {
         },
       });
       setUserAndNaviageToHomePage(response.data.authUser);
-    } catch (e) {}
+    } catch (e) {
+      <ErrorSwalMessage error={e} />;
+    }
   };
 
   const setUserAndNaviageToHomePage = (user) => {
     localStorage.setItem("user", JSON.stringify(user));
-    setUser(user);
+    setUser(() => user);
     navigate("/");
   };
 
