@@ -2,8 +2,6 @@
 import { Loading } from "react-loading-dot/lib";
 // Styles
 import styled from "styled-components";
-// Icons
-import { BsInstagram } from "react-icons/bs";
 
 /**
  * @author https://www.npmjs.com/package/react-loading-dot
@@ -18,8 +16,7 @@ import { BsInstagram } from "react-icons/bs";
 const LoadingDots = () => {
   return (
     <Wrapper>
-      {/* <Loading dots='5' size='1rem' background='grey' /> */}
-      <BsInstagram fontSize='3rem' />
+      <Loading dots='5' size='0.5rem' background='grey' />
     </Wrapper>
   );
 };
