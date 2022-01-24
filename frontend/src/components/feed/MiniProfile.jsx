@@ -63,7 +63,7 @@ const MiniProfile = ({ user, height, padding, imgSize, hover }) => {
       hover={hover}
     >
       <img src={user.profilePic} alt='profile' />
-      <TextInfo onClick={() => handleProfilePress(user.userId)}>
+      <TextInfo onClick={() => handleProfilePress(user.id)}>
         <p>
           <span>{user.username}</span>
         </p>
