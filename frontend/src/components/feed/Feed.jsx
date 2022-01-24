@@ -33,7 +33,11 @@ const Feed = () => {
   if (loading || !data) return <LoadingDots />;
 
   const onScroll = (e) => {
-    if (e.target.scrollTop + e.target.clientHeight === e.target.scrollHeight) {
+    if (
+      Math.trunc(e.target.scrollTop) + e.target.clientHeight ===
+      e.target.scrollHeight
+    ) {
+      console.log("In scroll");
       setTimeout(() => {
         fetchMorePosts();
       }, 300);
@@ -160,10 +164,14 @@ const LinkStyles = styled.p`
   cursor: pointer;
 `;
 
-const CopyRightWrapper = styled(LinkStyles)`
+const CopyRightWrapper = styled.div`
   display: flex;
   justify-content: center;
-  cursor: default;
+  margin-top: 1rem;
+  color: #d6d6d6;
+  font-size: 0.7rem;
+  font-weight: 300;
+  cursor: pointer;
 `;
 
 const GitHubIcon = styled(AiOutlineGithub)`
