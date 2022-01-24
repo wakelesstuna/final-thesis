@@ -3,6 +3,7 @@ package io.wakelesstuna.imagecdnserver.resoruce;
 import io.wakelesstuna.imagecdnserver.application.AppConstants;
 import io.wakelesstuna.imagecdnserver.application.ImageService;
 import io.wakelesstuna.imagecdnserver.domain.Image;
+import io.wakelesstuna.imagecdnserver.resoruce.dto.ImageFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -39,6 +40,20 @@ public class ImageResource {
     @PostMapping(AppConstants.Paths.UPLOAD_FILE_RESOURCE + "/{userId}")
     public ResponseEntity<String> uploadFile(@PathVariable UUID userId, @RequestParam("file") MultipartFile file) {
         String imageUrl = imageService.uploadFile(userId, file);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(imageUrl);
+    }
+
+    /**
+     * This endpoints handle the request for uploading a image
+     * to the database. It forwarding it to the service to handle the
+     * request.
+     *
+     * @param
+     * @return String of the downloading url
+     */
+    @PostMapping(AppConstants.Paths.UPLOAD_FILE_RESOURCE)
+    public ResponseEntity<String> uploadFile(@RequestBody ImageFile imageFile) {
+        String imageUrl = imageService.uploadFile(imageFile);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(imageUrl);
     }
 

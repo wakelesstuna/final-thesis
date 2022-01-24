@@ -1,8 +1,10 @@
 server_port: 8005
 
 spring:
+  application:
+    name: cdn-image
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://0.0.0.0:9003/cdn-image-db}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://0.0.0.0:5432/image}
     driver-class-name: org.postgresql.Driver
     username: ${SPRING_DATASOURCE_URL:root}
     password: ${SPRING_DATASOURCE_URL:letmein}

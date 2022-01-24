@@ -2,6 +2,7 @@ package io.wakelesstuna.imagecdnserver.application;
 
 import io.wakelesstuna.imagecdnserver.domain.Image;
 import io.wakelesstuna.imagecdnserver.persistance.ImageRepository;
+import io.wakelesstuna.imagecdnserver.resoruce.dto.ImageFile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -63,6 +64,25 @@ public class ImageService {
         return url;
     }
 
+    public String uploadFile(ImageFile imageFile) {
+        UUID imageId = UUID.randomUUID();
+        String url = generateDownloadUrl(imageId);
+
+        Image newImage = Image.builder()
+                .id(imageId)
+                .ownerId(imageFile.getUserId())
+                .fileName(imageFile.getFileName())
+                .fileType(imageFile.getFileType())
+                .fileSize(imageFile.getFileSize())
+                .data(imageFile.getData())
+                .createdAt(LocalDateTime.now(clock))
+                .build();
+        imageRepo.saveAndFlush(newImage);
+
+        log.info("New image was uploaded with url: {}", url);
+        return url;
+    }
+
     /**
      * Fetches the image entity with the corresponding id
      *
@@ -110,11 +130,13 @@ public class ImageService {
      * @return String
      */
     private String generateDownloadUrl(UUID imageId) {
-        return String.format("%s/%s%s/%s",
+        return String.format("%s%s%s/%s",
                 baseUrl,
                 AppConstants.Paths.BASE_IMAGE_RESOURCE,
                 AppConstants.Paths.DOWNLOAD_FILE_RESOURCE.substring(0, AppConstants.Paths.DOWNLOAD_FILE_RESOURCE.lastIndexOf('/')),
                 imageId);
     }
+
+
 }
 
