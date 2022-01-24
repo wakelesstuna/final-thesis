@@ -15,5 +15,8 @@ const server = new ApolloServer({
 });
 
 (async () => {
-  server.listen().then(({ url }) => console.log(`🚀  Server ready at ${url}`));
+  server
+    .listen()
+    .then(({ url }) => console.log(`🚀  Server ready at ${url}`))
+    .catch((error) => console.error(error));
 })();
