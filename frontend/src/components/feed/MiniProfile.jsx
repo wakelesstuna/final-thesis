@@ -10,16 +10,7 @@ import { followUser_gql, unFollowUser_gql } from "../../graphql/mutation";
 // Styles
 import styled from "styled-components";
 
-const MiniProfile = ({
-  userId,
-  username,
-  profilePic,
-  followers,
-  height,
-  padding,
-  imgSize,
-  hover,
-}) => {
+const MiniProfile = ({ user, height, padding, imgSize, hover }) => {
   const [followText, setFollowText] = useState();
   const FOLLOW = "Follow";
   const UNFOLLOW = "Unfollow";
@@ -61,7 +52,7 @@ const MiniProfile = ({
   };
 
   useEffect(() => {
-    checkIfUserisFollowing(followers);
+    checkIfUserisFollowing(user.followers);
   }, []);
 
   return (
@@ -71,15 +62,17 @@ const MiniProfile = ({
       imgSize={imgSize}
       hover={hover}
     >
-      <img src={profilePic} alt='profile' />
-      <TextInfo onClick={() => handleProfilePress(userId)}>
+      <img src={user.profilePic} alt='profile' />
+      <TextInfo onClick={() => handleProfilePress(user.userId)}>
         <p>
-          <span>{username}</span>
+          <span>{user.username}</span>
         </p>
-        <TextFamilyName>oasdf</TextFamilyName>
+        <TextFamilyName>
+          {user.firstName} {user.lastName}
+        </TextFamilyName>
       </TextInfo>
       <div>
-        <button onClick={(e) => handleFollow(e, currentUserId, userId)}>
+        <button onClick={(e) => handleFollow(e, currentUserId, user.id)}>
           {followText}
         </button>
       </div>

@@ -28,7 +28,7 @@ const UserMiniProfile = () => {
           <span>{user?.username}</span>
         </p>
         <TextFamilyName>
-          {user?.firstName} {user?.firstName}
+          {user?.firstName} {user?.lastName}
         </TextFamilyName>
       </TextInfo>
       <div>

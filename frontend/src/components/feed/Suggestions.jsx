@@ -30,13 +30,10 @@ const Suggestions = () => {
     <SuggestionStyle>
       <TextStyle>Suggestions</TextStyle>
       {data &&
-        data.map(({ id, username, profilePic, followers }) => (
+        data.map((user) => (
           <MiniProfile
-            key={id}
-            userId={id}
-            profilePic={profilePic}
-            username={username}
-            followers={followers}
+            key={user.id}
+            user={user}
             imgSize='30px'
             height='50px'
             padding='0.5rem 1rem'
