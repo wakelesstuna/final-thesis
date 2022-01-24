@@ -23,8 +23,6 @@ const VideoList = () => {
   if (loading) return <LoadingDots />;
   if (error) return <ErrorSwalMessage error={error} />;
 
-  console.log("Data ", data);
-
   return (
     <ListStyle>
       {data &&
