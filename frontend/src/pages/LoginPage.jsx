@@ -5,8 +5,6 @@ import ImageFades from "../components/util/ImageFades";
 import Footer from "../components/footer/Footer";
 import SignInForm from "../components/forms/SignInForm";
 
-import { BsFillHouseDoorFill } from "react-icons/bs";
-
 const LoginPage = () => {
   return (
     <div>
