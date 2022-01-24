@@ -1,6 +1,8 @@
 spring:
+  application:
+    name: dgs-post
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:9002/post-db}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/post}
     username: ${SPRING_DATASOURCE_USERNAME:root}
     password: ${SPRING_DATASOURCE_PASSWORD:letmein}
     driver-class-name: org.postgresql.Driver
