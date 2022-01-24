@@ -5,6 +5,8 @@ server:
   error:
     include-message: always
 spring:
+  application:
+    name: cdn-story
   http:
     multipart:
       enabled: true
