@@ -9,7 +9,6 @@ import { ApolloProvider } from "@apollo/client";
 import apolloClient from "./graphql/apolloClient";
 // Styled Components
 import { ThemeProvider } from "styled-components";
-import { theme } from "./styles/theme";
 import { GlobalCSS } from "./styles/global.css";
 
 // Component
@@ -20,10 +19,8 @@ ReactDOM.render(
     <ApolloProvider client={apolloClient}>
       <BrowserRouter>
         <RecoilRoot>
-          <ThemeProvider theme={theme}>
-            <GlobalCSS />
-            <App />
-          </ThemeProvider>
+          <GlobalCSS />
+          <App />
         </RecoilRoot>
       </BrowserRouter>
     </ApolloProvider>

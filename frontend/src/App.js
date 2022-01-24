@@ -26,7 +26,6 @@ import AccountPrivacyPage from "./pages/accounts/AccountPrivacyPage";
 import AccountLoginPage from "./pages/accounts/AccountLoginPage";
 import AccountEmailSentPage from "./pages/accounts/AccountEmailSentPage";
 import AccountHelpPage from "./pages/accounts/AccountHelpPage";
-import { useEffect } from "react";
 
 function App() {
   const setUser = useSetRecoilState(atomUser);
