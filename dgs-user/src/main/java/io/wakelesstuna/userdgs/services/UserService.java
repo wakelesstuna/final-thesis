@@ -2,19 +2,19 @@ package io.wakelesstuna.userdgs.services;
 
 import com.netflix.graphql.dgs.DgsComponent;
 import graphql.GraphQLException;
-import graphql.relay.*;
 import io.wakelesstuna.user.generated.types.*;
-import io.wakelesstuna.userdgs.connection.CursorUtil;
-import io.wakelesstuna.userdgs.persistence.*;
+import io.wakelesstuna.userdgs.persistence.FollowRepository;
 import io.wakelesstuna.userdgs.persistence.UserEntity;
-import lombok.RequiredArgsConstructor;
+import io.wakelesstuna.userdgs.persistence.UserRepository;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -26,11 +26,10 @@ import java.util.stream.Collectors;
  */
 @DgsComponent
 @Slf4j
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class UserService {
 
     private final ServiceHelper serviceHelper;
-    private final CursorUtil cursorUtil;
     private final FollowRepository followRepo;
     private final UserRepository userRepo;
 
@@ -67,8 +66,8 @@ public class UserService {
      * @return User the created user
      */
     public User createUser(CreateUserInput input, MultipartFile file) {
-        log.info("In Create user! {}", file);
         UUID userId = UUID.randomUUID();
+        serviceHelper.checkIfRequiredFieldsAreMissing(input);
         serviceHelper.checkIfUsernameUnique(input.getUsername());
         serviceHelper.checkIfEmailUnique(input.getEmail());
         serviceHelper.checkIfPhoneUnique(input.getPhone());
@@ -131,7 +130,7 @@ public class UserService {
             final String imageUrl = serviceHelper.uploadImage(userToUpdate.getId(), file);
             userToUpdate.setProfilePic(imageUrl);
             log.info("Updating user profile pic");
-        }else {
+        } else if (input.getProfilePic() != null) {
             userToUpdate.setProfilePic(input.getProfilePic());
         }
 
@@ -178,39 +177,7 @@ public class UserService {
         // delete all comments
         // commentRepo.deleteAllByUserId(userId);
         log.info("Deleting all comments of user");
-
     }
-
-
-    public Connection<User> getPaginationUser(Integer first, @Nullable String cursor) {
-        List<Edge<User>> edges = getUsersWithCursor(cursor).stream()
-                .map(user -> new DefaultEdge<>(user, cursorUtil.createCursorWith(user.getId())))
-                .limit(first)
-                .collect(Collectors.toList());
-
-        var pageInfo = new DefaultPageInfo(
-                cursorUtil.getFirstCursorFrom(edges),
-                cursorUtil.getLastCursorFrom(edges),
-                cursor != null,
-                edges.size() >= first);
-
-        return new DefaultConnection<>(edges, pageInfo);
-    }
-
-    private List<User> getUsersWithCursor(String cursor) {
-        if (cursor == null) return getUsers();
-
-        return getUsersAfter(cursorUtil.decode(cursor));
-    }
-
-    private List<User> getUsersAfter(UUID id) {
-        return userRepo.findAll().stream()
-                .dropWhile(user -> user.getId().compareTo(id) != 1)
-                .collect(Collectors.toList()).stream()
-                .map(UserEntity::mapToUserType)
-                .collect(Collectors.toList());
-    }
-
 
     public User authenticateUser(AuthUserInput authUserInput) {
         var username = authUserInput.getUsername();
@@ -230,6 +197,10 @@ public class UserService {
         return userRepo.findRandomButNotWith(username, howMany).stream()
                 .map(UserEntity::mapToUserType)
                 .collect(Collectors.toList());
+    }
+
+    public Boolean userExitsById(UUID id) {
+        return userRepo.existsById(id);
     }
 
     public Boolean exitsByUsername(String username) {
@@ -260,20 +231,10 @@ public class UserService {
     }
 
     public Map<UUID, User> getUserOfPost(List<UUID> userIds) {
-        log.info("Id {}", userIds.get(0));
-        User user = userRepo.getById(userIds.get(0)).mapToUserType();
-        log.info("user {}", user.getUsername());
-        var mapis = userIds.stream()
+        return userIds.stream()
                 .collect(Collectors.toConcurrentMap(Function.identity(),
                         id -> userRepo.getById(id).mapToUserType(),
                         (a, b) -> a,
                         ConcurrentHashMap::new));
-
-        log.info("Map: {}", mapis);
-        return mapis;
-    }
-
-    public Boolean userExitsById(UUID id) {
-        return userRepo.existsById(id);
     }
 }

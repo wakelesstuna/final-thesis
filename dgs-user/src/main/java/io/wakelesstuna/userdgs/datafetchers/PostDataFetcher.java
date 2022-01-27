@@ -8,8 +8,7 @@ import io.wakelesstuna.user.generated.DgsConstants;
 import io.wakelesstuna.user.generated.types.Post;
 import io.wakelesstuna.user.generated.types.User;
 import io.wakelesstuna.userdgs.services.ServiceHelper;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.AllArgsConstructor;
 
 import java.util.Map;
 import java.util.UUID;
@@ -18,8 +17,7 @@ import java.util.UUID;
  * @author oscar.steen.forss
  */
 @DgsComponent
-@RequiredArgsConstructor
-@Slf4j
+@AllArgsConstructor
 public class PostDataFetcher {
 
     private final ServiceHelper serviceHelper;

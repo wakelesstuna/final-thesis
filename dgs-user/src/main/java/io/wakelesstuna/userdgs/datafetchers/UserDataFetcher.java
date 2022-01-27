@@ -7,7 +7,7 @@ import io.wakelesstuna.userdgs.dataloader.FollowersDataLoader;
 import io.wakelesstuna.userdgs.dataloader.FollowingDataLoader;
 import io.wakelesstuna.userdgs.services.FollowService;
 import io.wakelesstuna.userdgs.services.UserService;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.dataloader.DataLoader;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * @author oscar.steen.forss
  */
 @DgsComponent
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class UserDataFetcher {
 
     private final UserService userService;

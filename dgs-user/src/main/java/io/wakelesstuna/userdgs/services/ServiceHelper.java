@@ -6,6 +6,7 @@ import com.talanlabs.avatargenerator.Avatar;
 import com.talanlabs.avatargenerator.GitHubAvatar;
 import com.talanlabs.avatargenerator.layers.backgrounds.ColorPaintBackgroundLayer;
 import graphql.GraphQLException;
+import io.wakelesstuna.user.generated.types.CreateUserInput;
 import io.wakelesstuna.userdgs.exceptions.MyCustomException;
 import io.wakelesstuna.userdgs.persistence.UserRepository;
 import io.wakelesstuna.userdgs.persistence.UserEntity;
@@ -40,11 +41,11 @@ public class ServiceHelper {
 
     private final Clock clock;
 
+    @Value("${image.max-size}")
+    private Long maxImageSize = 2L;
     @Value("${image.service.base-url}")
     private String imageServiceBaseUrl;
     private final String IMAGE_SERVICE_UPLOAD_FILE_RESOURCE = "/cdn/server/v1/upload";
-    @Value("${image.max-size}")
-    private Long maxImageSize = 2L;
 
     private final UserRepository userRepo;
     private final RestTemplate restTemplate = new RestTemplate();
@@ -136,20 +137,6 @@ public class ServiceHelper {
         return userRepo.findById(userId).orElseThrow(() -> new GraphQLException("No user found"));
     }
 
-    /**
-     * Check if a value is null returns true if value is null.
-     *
-     * @param value Object to check if null
-     * @return boolean
-     */
-    public boolean checkIfValueIsNull(Object value) {
-        return value == null;
-    }
-
-    public boolean userExists(UUID userId) {
-        return userRepo.existsById(userId);
-    }
-
     public void checkIfUsernameUnique(String username) {
         if (username.isEmpty())
             throw new MyCustomException("Username cannot be empty", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), ErrorType.BAD_REQUEST);
@@ -187,6 +174,12 @@ public class ServiceHelper {
     public void checkIfDescriptionIsValid(String description) {
         if (description.length() > 225) {
             throw new MyCustomException("Description is to long max size 225 characters", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), ErrorType.BAD_REQUEST);
+        }
+    }
+
+    public void checkIfRequiredFieldsAreMissing(CreateUserInput input) {
+        if (input.getUsername() == null) {
+            throw new MyCustomException("Username cannot be empty", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), ErrorType.BAD_REQUEST);
         }
     }
 }

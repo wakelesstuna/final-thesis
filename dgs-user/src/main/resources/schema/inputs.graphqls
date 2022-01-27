@@ -20,9 +20,9 @@ input UpdateUserInput {
 }
 
 input UpdatePasswordInput {
-    userId: UUID
-    oldPassword: String
-    newPassword: String
+    userId: UUID!
+    oldPassword: String!
+    newPassword: String!
 }
 
 input AuthUserInput {

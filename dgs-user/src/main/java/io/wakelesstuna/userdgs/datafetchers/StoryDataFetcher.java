@@ -8,7 +8,7 @@ import io.wakelesstuna.user.generated.DgsConstants;
 import io.wakelesstuna.user.generated.types.Story;
 import io.wakelesstuna.user.generated.types.User;
 import io.wakelesstuna.userdgs.services.ServiceHelper;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 
 import java.util.Map;
 import java.util.UUID;
@@ -17,7 +17,7 @@ import java.util.UUID;
  * @author oscar.steen.forss
  */
 @DgsComponent
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class StoryDataFetcher {
 
     private final ServiceHelper serviceHelper;

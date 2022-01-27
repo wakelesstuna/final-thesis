@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class CursorUtilTest {
 
-
     CursorUtil cursorUtil;
     List<Edge<Post>> edges;
 
