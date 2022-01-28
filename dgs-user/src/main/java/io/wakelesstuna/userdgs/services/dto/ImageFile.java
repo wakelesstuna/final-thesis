@@ -12,9 +12,6 @@ import java.util.UUID;
 
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
-@Setter
-@Getter
 public class ImageFile {
     UUID userId;
     String url;

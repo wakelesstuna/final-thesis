@@ -8,8 +8,9 @@ import io.wakelesstuna.userdgs.persistence.FollowEntity;
 import io.wakelesstuna.userdgs.persistence.FollowRepository;
 import io.wakelesstuna.userdgs.persistence.UserEntity;
 import io.wakelesstuna.userdgs.persistence.UserRepository;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
@@ -23,12 +24,11 @@ import java.util.stream.Collectors;
  * @author oscar.steen.forss
  */
 @Slf4j
-@RequiredArgsConstructor
+@AllArgsConstructor
 @DgsComponent
 public class FollowService {
 
     private final ServiceHelper serviceHelper;
-
     private final FollowRepository followRepo;
     private final UserRepository userRepo;
 
@@ -50,7 +50,8 @@ public class FollowService {
                 .createdAt(serviceHelper.getLocalDateTime())
                 .build();
 
-        followRepo.save(newFollowEntity);
+        followRepo.saveAndFlush(newFollowEntity);
+        log.info("New follow added {}", newFollowEntity.getId());
         return String.format("user %s started following user %s", user.getId(), follow.getId());
     }
 
@@ -65,7 +66,7 @@ public class FollowService {
                 .orElseThrow(() -> new GraphQLException("User does not follow current user"));
 
         followRepo.delete(followEntity);
-        log.info("User {} stoped follow user {}", followEntity.getUserId(), followEntity.getFollowId());
+        log.info("User {} stopped follow user {}", followEntity.getUserId(), followEntity.getFollowId());
         return "Stopped following user";
     }
 
@@ -81,27 +82,6 @@ public class FollowService {
     }
 
     /**
-     * This is the method we want to call when loading followers for multiple users.
-     * If this code was backed by a relational database, it would select reviews for all requested shows in a single SQL query.
-     */
-    public Map<UUID, List<User>> followersForUsers(List<UUID> userIds) {
-        log.info("Loading followers for {} users", userIds.size());
-
-        Map<UUID, List<User>> map = new ConcurrentHashMap<>();
-
-        for (UUID id : userIds) {
-            List<UUID> followersIds = followRepo.getAllByFollowId(id).stream()
-                    .map(FollowEntity::getUserId)
-                    .collect(Collectors.toList());
-            List<User> followers = userRepo.findAllById(followersIds).stream()
-                    .map(UserEntity::mapToUserType)
-                    .collect(Collectors.toList());
-            map.put(id, followers);
-        }
-        return map;
-    }
-
-    /**
      * This method counts all the users that a user is following
      * and returns the count.
      *
@@ -113,6 +93,25 @@ public class FollowService {
     }
 
 
+    /**
+     * This is the method we want to call when loading followers for multiple users.
+     * If this code was backed by a relational database, it would select
+     * reviews for all requested shows in a single SQL query.
+     */
+    public Map<UUID, List<User>> followersForUsers(List<UUID> userIds) {
+        log.info("Loading followers for {} users", userIds.size());
+
+        Map<UUID, List<User>> map = new ConcurrentHashMap<>();
+
+        for (UUID id : userIds) {
+            List<UUID> followersIds = followRepo.getAllByFollowId(id).stream()
+                    .map(FollowEntity::getUserId)
+                    .collect(Collectors.toList());
+            map.put(id, getUsers(followersIds));
+        }
+        return map;
+    }
+
     public Map<UUID, List<User>> followingsForUsers(List<UUID> userIds) {
 
         Map<UUID, List<User>> map = new ConcurrentHashMap<>();
@@ -121,11 +120,17 @@ public class FollowService {
             List<UUID> followingIds = followRepo.getAllByUserId(id).stream()
                     .map(FollowEntity::getFollowId)
                     .collect(Collectors.toList());
-            List<User> followers = userRepo.findAllById(followingIds).stream()
-                    .map(UserEntity::mapToUserType)
-                    .collect(Collectors.toList());
-            map.put(id, followers);
+            map.put(id, getUsers(followingIds));
         }
         return map;
     }
+
+    @NotNull
+    private List<User> getUsers(List<UUID> usersIds) {
+        return userRepo.findAllById(usersIds).stream()
+                .map(UserEntity::mapToUserType)
+                .collect(Collectors.toList());
+    }
+
+
 }

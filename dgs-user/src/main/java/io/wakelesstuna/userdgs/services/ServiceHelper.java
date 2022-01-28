@@ -8,10 +8,9 @@ import com.talanlabs.avatargenerator.layers.backgrounds.ColorPaintBackgroundLaye
 import graphql.GraphQLException;
 import io.wakelesstuna.user.generated.types.CreateUserInput;
 import io.wakelesstuna.userdgs.exceptions.MyCustomException;
-import io.wakelesstuna.userdgs.persistence.UserRepository;
 import io.wakelesstuna.userdgs.persistence.UserEntity;
+import io.wakelesstuna.userdgs.persistence.UserRepository;
 import io.wakelesstuna.userdgs.services.dto.ImageFile;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -35,20 +34,20 @@ import java.util.UUID;
  * @author oscar.steen.forss
  */
 @Slf4j
-@RequiredArgsConstructor
 @DgsComponent
 public class ServiceHelper {
 
     private final Clock clock;
-
-    @Value("${image.max-size}")
-    private Long maxImageSize = 2L;
-    @Value("${image.service.base-url}")
-    private String imageServiceBaseUrl;
-    private final String IMAGE_SERVICE_UPLOAD_FILE_RESOURCE = "/cdn/server/v1/upload";
-
     private final UserRepository userRepo;
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
+    private final String imageServiceBaseUrl;
+
+    public ServiceHelper(Clock clock, UserRepository userRepo, RestTemplate restTemplate, @Value("${image.service.base-url}") String imageServiceBaseUrl) {
+        this.clock = clock;
+        this.userRepo = userRepo;
+        this.restTemplate = restTemplate;
+        this.imageServiceBaseUrl = imageServiceBaseUrl;
+    }
 
     /**
      * Returns the LocalDateTime of now configured with a clock
@@ -71,8 +70,9 @@ public class ServiceHelper {
         ImageFile imageFile;
         ResponseEntity<String> answer;
 
-        final String urlForImageService = imageServiceBaseUrl + IMAGE_SERVICE_UPLOAD_FILE_RESOURCE;
-        log.info("Image service uri: {}", urlForImageService);
+        final String IMAGE_SERVICE_UPLOAD_FILE_RESOURCE = "/cdn/server/v1/upload";
+        final String URL_FOR_IMAGE_SERVICE = imageServiceBaseUrl + IMAGE_SERVICE_UPLOAD_FILE_RESOURCE;
+        log.info("Image service uri: {}", URL_FOR_IMAGE_SERVICE);
 
         try {
             if (file == null) {
@@ -85,14 +85,14 @@ public class ServiceHelper {
             }
 
             log.info("Uploading file to image service");
-            answer = restTemplate.postForEntity(urlForImageService, imageFile, String.class);
+            answer = restTemplate.postForEntity(URL_FOR_IMAGE_SERVICE, imageFile, String.class);
         } catch (ResourceAccessException e) {
             final String errorMsg = "Service unavailable, could not upload image";
-            log.error(errorMsg);
-            return "";
+            log.error(errorMsg, e);
+            throw new GraphQLException(errorMsg);
         } catch (IOException e) {
-            e.printStackTrace();
-            return "";
+            log.error("IOException when uploading file", e);
+            throw new GraphQLException(e.getMessage());
         }
         log.info("Image ur: {}", answer.getBody());
         return answer.getBody();
@@ -152,7 +152,6 @@ public class ServiceHelper {
     }
 
     public void checkIfPhoneUnique(String phone) {
-        if (phone.isEmpty()) return;
         if (userRepo.existsByPhone(phone))
             throw new MyCustomException("Phone number already exists", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), ErrorType.BAD_REQUEST);
     }
@@ -166,9 +165,10 @@ public class ServiceHelper {
 
     public void checkIfImageSize(Long fileSize) {
         long fileSizeInMB = fileSize / 1000000;
+        final long maxImageSizeInMB = 2L;
 
-        if (fileSizeInMB > maxImageSize)
-            throw new MyCustomException("File size to big. Max size allowed " + maxImageSize + " MB", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), ErrorType.BAD_REQUEST);
+        if (fileSizeInMB > maxImageSizeInMB)
+            throw new MyCustomException("File size to big. Max size allowed " + maxImageSizeInMB + " MB", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), ErrorType.BAD_REQUEST);
     }
 
     public void checkIfDescriptionIsValid(String description) {
@@ -179,7 +179,13 @@ public class ServiceHelper {
 
     public void checkIfRequiredFieldsAreMissing(CreateUserInput input) {
         if (input.getUsername() == null) {
-            throw new MyCustomException("Username cannot be empty", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), ErrorType.BAD_REQUEST);
+            throw new MyCustomException("Username cannot be null", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), ErrorType.BAD_REQUEST);
+        }
+        if (input.getEmail() == null) {
+            throw new MyCustomException("Email cannot be null", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), ErrorType.BAD_REQUEST);
+        }
+        if (input.getPassword() == null) {
+            throw new MyCustomException("Password cannot be null", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), ErrorType.BAD_REQUEST);
         }
     }
 }

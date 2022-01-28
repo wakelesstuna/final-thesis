@@ -12,13 +12,12 @@ import org.springframework.http.HttpStatus;
  */
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 public class MyCustomException extends RuntimeException {
 
-    private String message;
-    private HttpStatus httpStatus;
-    private int statusCode;
-    private ErrorType errorType;
+    private final String message;
+    private final HttpStatus httpStatus;
+    private final int statusCode;
+    private final ErrorType errorType;
 
 }

@@ -37,7 +37,6 @@ graphql:
 
 
 image.service.base-url: ${IMAGE_SERVICE_BASE_URL:http://localhost:8005}
-image.max-size: 2
 allowed.origin.url: ${ALLOWED_ORIGIN:http://localhost:3000}
 
 
