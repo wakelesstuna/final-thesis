@@ -4,7 +4,6 @@ import com.netflix.graphql.types.errors.ErrorType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 /**

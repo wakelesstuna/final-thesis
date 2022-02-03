@@ -7,8 +7,6 @@ import graphql.execution.DataFetcherExceptionHandler;
 import graphql.execution.DataFetcherExceptionHandlerParameters;
 import graphql.execution.DataFetcherExceptionHandlerResult;
 
-import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**

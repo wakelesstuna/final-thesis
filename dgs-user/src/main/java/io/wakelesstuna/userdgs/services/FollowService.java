@@ -111,7 +111,20 @@ public class FollowService {
         return map;
     }
 
+    /**
+     * Returns a map of key values user ids, and values a list of there followers.
+     *
+     * @param userIds list of ids.
+     * @return Map<UUID, List < User>>
+     */
     public Map<UUID, List<User>> followingsForUsers(List<UUID> userIds) {
+
+        /*List<FollowEntity> allFollowersByIds = followRepo.getAllByFollowIdIn(userIds);
+        List<UUID> userIds2 = allFollowersByIds.stream().map(FollowEntity::getUserId).distinct().collect(Collectors.toList());
+        List<UserEntity> allUsers = userRepo.findAllById(userIds2);
+
+        userIds.stream().collect(Collectors.toConcurrentMap(Function.identity(),
+                id -> allFollowersByIds.stream().map()))*/
 
         Map<UUID, List<User>> map = new ConcurrentHashMap<>();
 
@@ -124,6 +137,12 @@ public class FollowService {
         return map;
     }
 
+    /**
+     * Return a list of users.
+     *
+     * @param usersIds ids of the user to fetch from the database.
+     * @return List of users.
+     */
     @NotNull
     private List<User> getUsers(List<UUID> usersIds) {
         return userRepo.findAllById(usersIds).stream()

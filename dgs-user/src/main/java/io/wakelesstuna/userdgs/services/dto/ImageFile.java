@@ -1,6 +1,7 @@
 package io.wakelesstuna.userdgs.services.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 import java.util.UUID;
 

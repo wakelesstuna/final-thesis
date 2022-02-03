@@ -31,6 +31,8 @@ public interface FollowRepository extends JpaRepository<FollowEntity, UUID> {
      */
     List<FollowEntity> getAllByFollowId(UUID followId);
 
+    List<FollowEntity> getAllByFollowIdIn(List<UUID> ids);
+
     /**
      * Fetches a {@link FollowEntity} by user id and follow id.
      *
