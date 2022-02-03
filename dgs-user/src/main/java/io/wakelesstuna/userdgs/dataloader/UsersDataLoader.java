@@ -16,6 +16,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 /**
+ * This is a DataLoader Class for the field {@value io.wakelesstuna.user.generated.DgsConstants.POST#User}.
+ *
  * @author oscar.steen.forss
  */
 @RequiredArgsConstructor

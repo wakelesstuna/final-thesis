@@ -133,10 +133,21 @@ public class ServiceHelper {
                 .build();
     }
 
+    /**
+     * Fetching a user.
+     *
+     * @param userId Id of the user to fetch.
+     * @return UserEntity
+     */
     public UserEntity getUser(UUID userId) {
         return userRepo.findById(userId).orElseThrow(() -> new GraphQLException("No user found"));
     }
 
+    /**
+     * Check if a username is unique and does not already exists in the database.
+     *
+     * @param username String
+     */
     public void checkIfUsernameUnique(String username) {
         if (username.isEmpty())
             throw new MyCustomException("Username cannot be empty", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), ErrorType.BAD_REQUEST);
@@ -144,6 +155,11 @@ public class ServiceHelper {
             throw new MyCustomException("Username already exists", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), ErrorType.BAD_REQUEST);
     }
 
+    /**
+     * Check if a email is unique and does not already exists in the database.
+     *
+     * @param email String
+     */
     public void checkIfEmailUnique(String email) {
         if (email.isEmpty())
             throw new MyCustomException("Email cannot be empty", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), ErrorType.BAD_REQUEST);
@@ -151,11 +167,21 @@ public class ServiceHelper {
             throw new MyCustomException("Email already exists", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), ErrorType.BAD_REQUEST);
     }
 
+    /**
+     * Check if a phone is unique and does not already exists in the database.
+     *
+     * @param phone String
+     */
     public void checkIfPhoneUnique(String phone) {
         if (userRepo.existsByPhone(phone))
             throw new MyCustomException("Phone number already exists", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), ErrorType.BAD_REQUEST);
     }
 
+    /**
+     * Validates a password.
+     *
+     * @param password String
+     */
     public void validatePassword(String password) {
         if (password.isEmpty())
             throw new MyCustomException("Password cannot be empty", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), ErrorType.BAD_REQUEST);
@@ -163,6 +189,11 @@ public class ServiceHelper {
             throw new MyCustomException("Password must be al least 6 characters long", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), ErrorType.BAD_REQUEST);
     }
 
+    /**
+     * Check if the image size is allowed to be stored.
+     *
+     * @param fileSize Long
+     */
     public void checkIfImageSize(Long fileSize) {
         long fileSizeInMB = fileSize / 1000000;
         final long maxImageSizeInMB = 2L;
@@ -171,12 +202,22 @@ public class ServiceHelper {
             throw new MyCustomException("File size to big. Max size allowed " + maxImageSizeInMB + " MB", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), ErrorType.BAD_REQUEST);
     }
 
+    /**
+     * Validates the length of the description.
+     *
+     * @param description String
+     */
     public void checkIfDescriptionIsValid(String description) {
         if (description.length() > 225) {
             throw new MyCustomException("Description is to long max size 225 characters", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), ErrorType.BAD_REQUEST);
         }
     }
 
+    /**
+     * Check if any of the required fields are missing to be able to create a user.
+     *
+     * @param input CreateUSerInput
+     */
     public void checkIfRequiredFieldsAreMissing(CreateUserInput input) {
         if (input.getUsername() == null) {
             throw new MyCustomException("Username cannot be null", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), ErrorType.BAD_REQUEST);

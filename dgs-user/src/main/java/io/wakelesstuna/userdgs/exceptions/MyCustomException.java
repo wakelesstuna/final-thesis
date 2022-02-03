@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 /**
+ * This class is used to create custom exceptions.
+ *
  * @author oscar.steen.forss
  */
 @Builder

@@ -1,37 +1,41 @@
+# Input type for creating a user.
 input CreateUserInput {
-    firstName: String
-    lastName: String
-    phone: String
-    email: String!
-    username: String!
-    password: String!
-    profilePic: String
+    firstName: String # String not required.
+    lastName: String # String not required.
+    phone: String # String not required.
+    email: String! # String required.
+    username: String! # String required.
+    password: String! # String required.
+    profilePic: String # String not required.
 }
 
+# Input type for updating a user information.
 input UpdateUserInput {
-    userId: UUID!
-    username: String
-    firstName: String
-    lastName: String
-    email: String
-    phone: String
-    description: String
-    profilePic: String
+    userId: UUID! # UUID required.
+    username: String # String not required.
+    firstName: String # String not required.
+    lastName: String # String not required.
+    email: String # String not required.
+    phone: String # String not required.
+    description: String # String not required.
+    profilePic: String # String not required.
 }
 
+# Input for updating a user password.
 input UpdatePasswordInput {
-    userId: UUID!
-    oldPassword: String!
-    newPassword: String!
+    userId: UUID! # UUID required.
+    oldPassword: String! # String required.
+    newPassword: String! # String required.
 }
 
+# Input for authenticate a user.
 input AuthUserInput {
-    userId: UUID
-    username: String!
-    password: String!
+    username: String! # String required.
+    password: String! # String required.
 }
 
+# Input for following a user.
 input FollowInput {
-    userId: UUID
-    followId: UUID
+    userId: UUID! # UUID required.
+    followId: UUID!# UUID required.
 }

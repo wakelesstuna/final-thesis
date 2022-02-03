@@ -17,6 +17,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
+ * This is data fetcher for the user type.
+ *
  * @author oscar.steen.forss
  */
 @DgsComponent

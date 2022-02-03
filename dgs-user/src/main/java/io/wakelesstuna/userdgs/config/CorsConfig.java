@@ -9,7 +9,7 @@ import org.springframework.web.filter.CorsFilter;
 
 /**
  * Cors config for the application. You can set the allowed origin from
- * the application.properties file.
+ * the application.yml file.
  *
  * @author oscar.steen.forss
  */

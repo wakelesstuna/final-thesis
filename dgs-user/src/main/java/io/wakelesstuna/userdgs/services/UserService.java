@@ -18,15 +18,16 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This is a service class that handle the logic for the {@link UserEntity}.
  *
  * @author oscar.steen.forss
  */
-@DgsComponent
 @Slf4j
 @AllArgsConstructor
+@DgsComponent
 public class UserService {
 
     private final ServiceHelper serviceHelper;
@@ -92,7 +93,13 @@ public class UserService {
         return newUser.mapToUserType();
     }
 
-
+    /**
+     * Updates a user information
+     *
+     * @param input UpdateUserInput object with information about what to update.
+     * @param file  MultipartFile to update profile image
+     * @return User the updated user
+     */
     @Transactional
     public User updateUser(UpdateUserInput input, MultipartFile file) {
         var userToUpdate = serviceHelper.getUser(input.getUserId());
@@ -139,13 +146,36 @@ public class UserService {
         return userToUpdate.mapToUserType();
     }
 
+    /**
+     * Updates a user password.
+     *
+     * @param input UpdateUserInput input about the user to update the password for.
+     * @return Boolean
+     */
+    public Boolean updatePassword(UpdatePasswordInput input) {
+        var user = serviceHelper.getUser(input.getUserId());
+        if (user.getPassword().equals(input.getOldPassword())) {
+            log.info("User old password matches");
+            user.setPassword(input.getNewPassword());
+            userRepo.saveAndFlush(user);
+            log.info("Update user password");
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Deletes a user from the database. Sends request to post service to delete the user
+     * posts, comments, likes, and bookmarks.
+     *
+     * @param authUserInput AuthUserInput input about the user to delete.
+     * @return String
+     */
     @Transactional
     public String deleteUser(AuthUserInput authUserInput) {
-        // find user
         var userToDelete = serviceHelper.getUser(authUserInput.getUserId());
         // TODO: 2021-12-13 Kolla att lösenordet stämmer innan delete utför
         var userId = userToDelete.getId();
-
 
         // delete all follows
         followRepo.deleteAllByUserId(userId);
@@ -162,6 +192,9 @@ public class UserService {
         return HttpStatus.ACCEPTED.toString();
     }
 
+    /**
+     * Sends a delete request to the post service.
+     */
     public void sendDeleteRequest() {
         // TODO: 2022-01-13 send request to post service to delete all posts
         // delete all post
@@ -179,6 +212,12 @@ public class UserService {
         log.info("Deleting all comments of user");
     }
 
+    /**
+     * Authenticate a user, returns the user if success.
+     *
+     * @param authUserInput input about the user to authenticate.
+     * @return User
+     */
     public User authenticateUser(AuthUserInput authUserInput) {
         var username = authUserInput.getUsername();
         var user = userRepo.findByUsernameOrEmailOrPhone(
@@ -193,47 +232,74 @@ public class UserService {
         throw new GraphQLException(HttpStatus.UNAUTHORIZED.toString());
     }
 
+    /**
+     * Fetches a random list of users.
+     *
+     * @param howMany  Integer, how many random users to fetch.
+     * @param username String, username of a user to exclude.
+     * @return List of user.
+     */
     public List<User> getRandomUsers(Integer howMany, String username) {
         return userRepo.findRandomButNotWith(username, howMany).stream()
                 .map(UserEntity::mapToUserType)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Check if user exists by id.
+     *
+     * @param id of the user
+     * @return Boolean
+     */
     public Boolean userExitsById(UUID id) {
         return userRepo.existsById(id);
     }
 
+    /**
+     * Check if user exists by username.
+     *
+     * @param username of the user
+     * @return Boolean
+     */
     public Boolean exitsByUsername(String username) {
         log.info("Checking if username exists: {}", username);
         return userRepo.existsByUsername(username);
     }
 
+    /**
+     * Check if user exists by email.
+     *
+     * @param email of the user
+     * @return Boolean
+     */
     public Boolean exitsByEmail(String email) {
         log.info("Checking if email exists: {}", email);
         return userRepo.existsByEmail(email);
     }
 
+    /**
+     * Check if user exists by phone.
+     *
+     * @param phone of the user
+     * @return Boolean
+     */
     public Boolean exitsByPhone(String phone) {
         log.info("Checking if email exists: {}", phone);
         return userRepo.existsByPhone(phone);
     }
 
-    public Boolean updatePassword(UpdatePasswordInput input) {
-        var user = serviceHelper.getUser(input.getUserId());
-        if (user.getPassword().equals(input.getOldPassword())) {
-            log.info("User old password matches");
-            user.setPassword(input.getNewPassword());
-            userRepo.saveAndFlush(user);
-            log.info("Update user password");
-            return true;
-        }
-        return false;
-    }
-
+    /**
+     * Get a map of users, user id is used as key and the user as value.
+     * @param userIds List of user ids.
+     * @return Map<UUID,User>
+     */
     public Map<UUID, User> getUserOfPost(List<UUID> userIds) {
+        List<UserEntity> allByIds = userRepo.findAllById(userIds);
         return userIds.stream()
                 .collect(Collectors.toConcurrentMap(Function.identity(),
-                        id -> userRepo.getById(id).mapToUserType(),
+                        id -> allByIds.stream().filter(u -> u.getId().equals(id)).findFirst()
+                        .map(UserEntity::mapToUserType)
+                        .get(),
                         (a, b) -> a,
                         ConcurrentHashMap::new));
     }

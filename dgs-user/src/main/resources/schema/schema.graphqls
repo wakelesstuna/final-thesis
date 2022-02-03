@@ -9,10 +9,13 @@ type Query {
     users(usernameFilter: String): [User]
     # Fetches random users, "howMany" is required and is how many random users you want to fetch. "username"  is required, it used to filter away a user from the response.
     fetchRandomUsers(howMany: Int!, username: String!): [User]
-
+    # Checks if a user exits by id
     userExitsById(id: UUID): Boolean
+    # Check if a user exits by username
     exitsByUsername(username: String): Boolean
+    # Check if a user exits by email
     exitsByEmail(email: String): Boolean
+    # Check if a user exits by phone
     exitsByPhone(phone: String): Boolean
 }
 

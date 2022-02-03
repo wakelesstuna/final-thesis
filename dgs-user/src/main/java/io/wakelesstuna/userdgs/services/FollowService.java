@@ -99,7 +99,6 @@ public class FollowService {
      * reviews for all requested shows in a single SQL query.
      */
     public Map<UUID, List<User>> followersForUsers(List<UUID> userIds) {
-        log.info("Loading followers for {} users", userIds.size());
 
         Map<UUID, List<User>> map = new ConcurrentHashMap<>();
 

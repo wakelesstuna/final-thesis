@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
+ * This is a data fetcher for adding a user field to the extended type comment.
+ *
  * @author oscar.steen.forss
  */
 @DgsComponent
