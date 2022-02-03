@@ -17,6 +17,9 @@ export const getUserById_gql = gql`
       phone
       description
       totalFollowing
+      followers {
+        id
+      }
       totalFollowers
       totalPosts
     }

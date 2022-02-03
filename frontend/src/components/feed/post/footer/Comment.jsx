@@ -16,18 +16,6 @@ const Comment = ({ comment, post, refetchComments }) => {
   const [deleteCommentMutation] = useMutation(deleteComment_gql);
 
   const handleDeleteComment = async () => {
-    alert(
-      "Delete comment" +
-        JSON.stringify(
-          {
-            commentId: comment.id,
-            postId: post.id,
-            userId: id,
-          },
-          null,
-          4
-        )
-    );
     try {
       const response = await deleteCommentMutation({
         variables: {

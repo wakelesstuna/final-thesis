@@ -73,7 +73,9 @@ const ProfileContent = ({ currentPath, profileId }) => {
         {choice === PROFILE_CHOICE.POSTS && (
           <UserPostsList profileId={profileId} />
         )}
-        {choice === PROFILE_CHOICE.VIDEOS && <VideoList />}
+        {choice === PROFILE_CHOICE.VIDEOS && (
+          <VideoList profileId={profileId} />
+        )}
         {choice === PROFILE_CHOICE.SAVED && <BookmarkList />}
         {choice === PROFILE_CHOICE.TAGGED && <ErrorMessage />}
       </div>

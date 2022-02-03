@@ -11,12 +11,10 @@ import LoadingDots from "../util/LoadingDots";
 import StoryItem from "./StoryItem";
 import styled from "styled-components";
 
-const VideoList = () => {
-  const { id } = useRecoilValue(atomUser);
-
+const VideoList = ({ profileId }) => {
   const { data, loading, error } = useQuery(fetchStoriesForUser_gql, {
     variables: {
-      id,
+      id: profileId,
     },
   });
 
