@@ -177,22 +177,19 @@ public class UserService {
     @Transactional
     public String deleteUser(AuthUserInput authUserInput) {
         var userToDelete = serviceHelper.getUser(authUserInput.getUserId());
-        // TODO: 2021-12-13 Kolla att lösenordet stämmer innan delete utför
         if(!userToDelete.getPassword().equals(authUserInput.getPassword())) {
             throw new GraphQLException("Wrong password");
         }
         var userId = userToDelete.getId();
 
-        // delete all follows
+        deleteUserPostsInformation(userId);
+
         followRepo.deleteAllByUserId(userId);
         log.info("Deleting all follows of user");
-        // delete all followings
+
         followRepo.deleteAllByFollowId(userId);
         log.info("Deleting all followers of user");
 
-        deleteUserPostsInformation(userId);
-
-        // delete user
         log.info("Deleting user");
         userRepo.delete(userToDelete);
         log.info("User deleted");
