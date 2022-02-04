@@ -24,3 +24,7 @@ image:
     base-url: ${IMAGE_SERVICE_BASE_URL:http://localhost:${server_port}}
 server:
   port: ${server_port}
+
+allowed:
+  origin:
+    url: '*'

@@ -31,15 +31,15 @@ public class ImageService {
 
     private final Clock clock;
     private final ImageRepository imageRepo;
-
     @Value("${image.service.base-url}")
     private String baseUrl;
 
     /**
      * Uploads a file to the database, sets important data
-     * to the entity and then returns the download url for the image
+     * to the entity and then returns the download url for the image.
      *
-     * @param
+     * @param userId UUID
+     * @param file   MultipartFile
      * @return String
      */
     public String uploadFile(UUID userId, MultipartFile file) {
@@ -64,6 +64,12 @@ public class ImageService {
         return url;
     }
 
+    /**
+     * Persists a image file to the database.
+     *
+     * @param imageFile ImageFile
+     * @return String
+     */
     public String uploadFile(ImageFile imageFile) {
         UUID imageId = UUID.randomUUID();
         String url = generateDownloadUrl(imageId);
@@ -90,7 +96,8 @@ public class ImageService {
      * @return Image
      */
     public Image downloadImage(UUID imageId) {
-        Image image = getImageById(imageId);
+        Image image = imageRepo.findById(imageId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "File not found"));
         log.info("Fetch image: {}", image.getId());
         return image;
     }
@@ -110,20 +117,6 @@ public class ImageService {
     }
 
     /**
-     * Fetches an image entity from the database with
-     * the corresponding id
-     *
-     * @param id of the image to fetch*
-     * @return Image
-     * @throws ResponseStatusException with http status INTERNAL_SERVER_ERROR if the file was not found
-     */
-    private Image getImageById(UUID id) {
-        log.info("Fetching image: {}", id);
-        return imageRepo.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "File not found"));
-    }
-
-    /**
      * This method generates an download url for an image
      *
      * @param imageId id of the image that needs and url
@@ -136,7 +129,5 @@ public class ImageService {
                 AppConstants.Paths.DOWNLOAD_FILE_RESOURCE.substring(0, AppConstants.Paths.DOWNLOAD_FILE_RESOURCE.lastIndexOf('/')),
                 imageId);
     }
-
-
 }
 

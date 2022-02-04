@@ -34,7 +34,6 @@ public class ImageResource {
      * to the database. It forwarding it to the service to handle the
      * request.
      *
-     * @param
      * @return String of the downloading url
      */
     @PostMapping(AppConstants.Paths.UPLOAD_FILE_RESOURCE + "/{userId}")
@@ -48,7 +47,6 @@ public class ImageResource {
      * to the database. It forwarding it to the service to handle the
      * request.
      *
-     * @param
      * @return String of the downloading url
      */
     @PostMapping(AppConstants.Paths.UPLOAD_FILE_RESOURCE)
