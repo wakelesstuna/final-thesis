@@ -199,6 +199,7 @@ public class UserService {
 
     /**
      * Sends a delete request to the post service.
+     * @param userId UUID id of the user.
      */
     public void deleteUserPostsInformation(UUID userId) {
 
