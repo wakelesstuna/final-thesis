@@ -14,9 +14,13 @@ import java.util.UUID;
 @Repository
 public interface LikeRepository extends JpaRepository<LikeEntity, UUID> {
 
+    /**
+     * Fetches a list of LikeEntities by post id.
+     *
+     * @param postId UUID id of the post to find likeEntities for.
+     * @return List of LikeEntity.
+     */
     List<LikeEntity> findAllByPostId(UUID postId);
-
-    boolean existsByUserIdAndAndPostId(UUID userId, UUID postId);
 
     /**
      * Finds a {@link LikeEntity} by postId and userId.
@@ -31,9 +35,18 @@ public interface LikeRepository extends JpaRepository<LikeEntity, UUID> {
      * Counts all {@link LikeEntity} for a post by id.
      *
      * @param postId id of post.
-     * @return int
+     * @return Integer
      */
-    int countAllByPostId(UUID postId);
+    Integer countAllByPostId(UUID postId);
+
+    /**
+     * Checks if a like exists by user id and post id.
+     *
+     * @param userId UUID of the user.
+     * @param postId UUID of the post.
+     * @return Boolean
+     */
+    Boolean existsByUserIdAndPostId(UUID userId, UUID postId);
 
     /**
      * Deletes all {@link LikeEntity} with the same user id.

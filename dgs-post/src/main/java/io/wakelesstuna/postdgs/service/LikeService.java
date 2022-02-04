@@ -6,7 +6,7 @@ import io.wakelesstuna.post.generated.types.LikeInput;
 import io.wakelesstuna.postdgs.exceptions.MyCustomException;
 import io.wakelesstuna.postdgs.persistance.LikeEntity;
 import io.wakelesstuna.postdgs.persistance.LikeRepository;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * @author oscar.steen.forss
  */
 @Slf4j
-@RequiredArgsConstructor
+@AllArgsConstructor
 @DgsComponent
 public class LikeService {
 
@@ -31,11 +31,14 @@ public class LikeService {
     private final LikeRepository likeRepo;
 
     /**
-     * @param likeInput
-     * @return
+     * Adds a like to a post, checks if the post and user exists.
+     * Also check if the user already like the post.
+     * Returns "202 ACCEPTED" if all went well.
+     *
+     * @param likeInput LikeInput information about the user.
+     * @return String
      */
     public String likePost(LikeInput likeInput) {
-        log.info("likeInput: {}", likeInput);
         var post = serviceHelper.getPost(likeInput.getPostId());
 
         if (!serviceHelper.doesUserExists(likeInput.getUserId())) {
@@ -43,7 +46,7 @@ public class LikeService {
 
         }
 
-        if (likeRepo.existsByUserIdAndAndPostId(likeInput.getUserId(), post.getId()))
+        if (likeRepo.existsByUserIdAndPostId(likeInput.getUserId(), post.getId()))
             throw MyCustomException.builder()
                     .message("User already liked this post")
                     .httpStatus(HttpStatus.BAD_REQUEST)
@@ -61,6 +64,13 @@ public class LikeService {
         return HttpStatus.ACCEPTED.toString();
     }
 
+    /**
+     * Unlike a post.
+     * Returns "202 ACCEPTED" if all goes well.
+     *
+     * @param likeInput LikeInput information about what post to like.
+     * @return String
+     */
     public String unLikePost(LikeInput likeInput) {
         var post = serviceHelper.getPost(likeInput.getPostId());
         var like = likeRepo.findByPostIdAndUserId(post.getId(), likeInput.getUserId());
@@ -69,10 +79,22 @@ public class LikeService {
         return HttpStatus.ACCEPTED.toString();
     }
 
-    public boolean isPostLiked(LikeInput input) {
-        return likeRepo.existsByUserIdAndAndPostId(input.getUserId(), input.getPostId());
+    /**
+     * Checks if a post is liked.
+     *
+     * @param input LikeInput information about likes.
+     * @return Boolean.
+     */
+    public Boolean isPostLiked(LikeInput input) {
+        return likeRepo.existsByUserIdAndPostId(input.getUserId(), input.getPostId());
     }
 
+    /**
+     * Counts all the likes for a list of posts.
+     *
+     * @param postIds List of UUID, ids of posts.
+     * @return Map<UUID, Integer>
+     */
     public Map<UUID, Integer> likesForPosts(List<UUID> postIds) {
         var likesMap = postIds.stream()
                 .collect(Collectors.toConcurrentMap(Function.identity(),
@@ -83,6 +105,12 @@ public class LikeService {
         return likesMap;
     }
 
+    /**
+     * Counts all the likes for a post.
+     *
+     * @param postId UUID id of the post.
+     * @return Integer.
+     */
     public Integer getTotalLikes(UUID postId) {
         log.info("Fetching all likes for post: {}", postId);
         return likeRepo.countAllByPostId(postId);

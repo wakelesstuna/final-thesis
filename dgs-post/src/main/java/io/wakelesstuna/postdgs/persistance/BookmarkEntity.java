@@ -24,7 +24,6 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 public class BookmarkEntity {
-
     @Id
     private UUID id;
     private UUID userId;

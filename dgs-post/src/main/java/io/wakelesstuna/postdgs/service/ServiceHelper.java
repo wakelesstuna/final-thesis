@@ -101,6 +101,12 @@ public class ServiceHelper {
         return answer.getBody();
     }
 
+    /**
+     * Sends a request to the image server to delete a image.
+     *
+     * @param post Post of the image to delete.
+     * @return String
+     */
     public String deleteImage(PostEntity post) {
         ResponseEntity<String> response;
 
@@ -161,10 +167,11 @@ public class ServiceHelper {
                 .build());
     }
 
-    public boolean postExists(UUID postId) {
-        return postRepo.existsById(postId);
-    }
-
+    /**
+     * Check if the file size is allowed.
+     *
+     * @param fileSize Long size of a file.
+     */
     public void checkIfImageSize(Long fileSize) {
         long fileSizeInMB = fileSize / 1000000;
 
@@ -172,9 +179,23 @@ public class ServiceHelper {
             throw new MyCustomException("File size to big. Max size allowed " + maxImageSize + " MB", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), ErrorType.BAD_REQUEST);
     }
 
+    /**
+     * Check if a post exists by id.
+     *
+     * @param postId UUID id of the post.
+     * @return Boolean
+     */
+    public Boolean postExists(UUID postId) {
+        return postRepo.existsById(postId);
+    }
 
-    public boolean doesUserExists(UUID userId) {
-        // TODO: 2022-01-14 Send request to user.dgs to se if user exsits
+    /**
+     * Check if a user exists by id.
+     *
+     * @param userId UUID id of the user.
+     * @return Boolean.
+     */
+    public Boolean doesUserExists(UUID userId) {
         return true;
     }
 

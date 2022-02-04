@@ -10,7 +10,7 @@ import io.wakelesstuna.postdgs.persistance.CommentEntity;
 import io.wakelesstuna.postdgs.persistance.CommentRepository;
 import io.wakelesstuna.postdgs.persistance.PostEntity;
 import io.wakelesstuna.postdgs.persistance.PostRepository;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * @author oscar.steen.forss
  */
 @Slf4j
-@RequiredArgsConstructor
+@AllArgsConstructor
 @DgsComponent
 public class CommentService {
 
@@ -44,8 +44,6 @@ public class CommentService {
      * @throws GraphQLException if user or post does not exists
      */
     public Comment createComment(CreateCommentInput input) {
-        // TODO: 2022-01-14 Send request to user-dgs to see if user exsits
-
         if (!postRepo.existsById(input.getPostId())) throw new GraphQLException("Post does not exists!");
 
         CommentEntity newComment = CommentEntity.builder()

@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 /**
+ * This class is the DataFetcher for {@link Story}.
+ *
  * @author oscar.steen.forss
  */
 @DgsComponent

@@ -30,6 +30,10 @@ public class StoriesDataLoader implements MappedBatchLoader<UUID, List<Story>> {
                     Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
             );
 
+    /**
+     * This method will be called once, even if multiple datafetchers use the load() method on the DataLoader.
+     * This way Stories can be loaded for all the Users in a single call instead of per individual User.
+     */
     @Override
     public CompletionStage<Map<UUID, List<Story>>> load(Set<UUID> ids) {
         return CompletableFuture.supplyAsync(() ->

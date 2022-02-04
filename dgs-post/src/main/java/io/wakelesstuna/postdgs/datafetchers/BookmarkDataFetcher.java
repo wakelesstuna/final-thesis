@@ -11,6 +11,8 @@ import io.wakelesstuna.postdgs.service.PostService;
 import lombok.RequiredArgsConstructor;
 
 /**
+ * This class is the DataFetcher for the bookmark fields on {@link io.wakelesstuna.post.generated.types.Post}.
+ *
  * @author oscar.steen.forss
  */
 @DgsComponent

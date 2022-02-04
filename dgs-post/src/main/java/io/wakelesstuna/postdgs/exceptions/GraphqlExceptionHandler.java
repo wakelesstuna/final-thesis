@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * This class is used to configure custom behavior of the exceptions cast in the datafetchers.
+ *
  * @author oscar.steen.forss
  */
 @DgsComponent
@@ -31,9 +33,7 @@ public class GraphqlExceptionHandler implements DataFetcherExceptionHandler {
             }else if (exception.getClass().isAssignableFrom(UserNotFoundException.class)) {
                 log.error("User not found");
             }
-
             TypedGraphQLError graphQLError = buildError(exception, handlerParameters);
-
             return DataFetcherExceptionHandlerResult.newResult()
                     .error(graphQLError)
                     .build();

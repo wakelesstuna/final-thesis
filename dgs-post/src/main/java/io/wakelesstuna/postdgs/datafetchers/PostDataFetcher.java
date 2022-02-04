@@ -19,7 +19,6 @@ import java.util.UUID;
 
 /**
  * This class is the DataFetcher for {@link Post}.
- * It handles the mutations and queries of the post type.
  *
  * @author oscar.steen.forss
  */

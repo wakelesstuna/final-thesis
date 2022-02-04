@@ -8,8 +8,7 @@ import io.wakelesstuna.postdgs.service.LikeService;
 import lombok.RequiredArgsConstructor;
 
 /**
- * This class is the DataFetcher.
- * It handles the mutations of the liking post type.
+ * This class is the DataFetcher for like fields on {@link Post}
  *
  * @author oscar.steen.forss
  */

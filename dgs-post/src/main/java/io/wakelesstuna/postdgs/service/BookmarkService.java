@@ -7,14 +7,12 @@ import io.wakelesstuna.post.generated.types.Post;
 import io.wakelesstuna.postdgs.dataloader.BookmarkDataLoader;
 import io.wakelesstuna.postdgs.persistance.BookmarkEntity;
 import io.wakelesstuna.postdgs.persistance.BookmarkRepository;
-import io.wakelesstuna.postdgs.persistance.PostEntity;
 import io.wakelesstuna.postdgs.persistance.PostRepository;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -28,12 +26,11 @@ import java.util.stream.Collectors;
  * @author oscar.steen.forss
  */
 @Slf4j
-@RequiredArgsConstructor
+@AllArgsConstructor
 @DgsComponent
 public class BookmarkService {
 
     private final ServiceHelper serviceHelper;
-
     private final BookmarkRepository bookmarkRepo;
     private final PostRepository postRepo;
 

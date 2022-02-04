@@ -44,6 +44,13 @@ public class PostService {
     private int originalListSize;
     private int cursorIndex;
 
+    /**
+     * Creates a post.
+     *
+     * @param input CreatePostInput information about the post that is to be created.
+     * @param file  MultiPartFile image file for the post.
+     * @return Post
+     */
     @Transactional
     public Post createPost(CreatePostInput input, MultipartFile file) {
         UUID postId = UUID.randomUUID();
@@ -62,6 +69,12 @@ public class PostService {
         return newPost.mapToPostType();
     }
 
+    /**
+     * Fetches a post by id.
+     *
+     * @param postId UUID id of the post.
+     * @return Post
+     */
     public Post getPost(UUID postId) {
         return serviceHelper.getPost(postId).mapToPostType();
     }
@@ -77,6 +90,12 @@ public class PostService {
         return postRepo.countAllByUserId(id);
     }
 
+    /**
+     * Fetches all the posts for a user based on the user id.
+     *
+     * @param postFilter PostFilter filter what posts to get.
+     * @return List of Post
+     */
     public List<Post> getPosts(PostFilter postFilter) {
         log.info("Fetching all posts for user {}", postFilter.getUserId());
         return postRepo.findAllByUserId(postFilter.getUserId()).stream()
@@ -85,6 +104,11 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Fetches a list of posts.
+     *
+     * @return List of Post
+     */
     public List<Post> getPosts() {
         log.info("Fetching all posts");
         return postRepo.findAll().stream()
@@ -93,16 +117,23 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * This method is used to fetch posts with pagination. It uses a cursor to
+     * determinate where to start to fetch all posts. How many posts that are loaded for
+     * each page is determent by the "first" variable.
+     *
+     * @param first  Integer how many post per page.
+     * @param cursor String cursor of a post.
+     * @return Connection<Post>
+     */
     public Connection<Post> getPaginationPost(@NotNull Integer first, @Nullable String cursor) {
         if (cursor == null) {
             cursorIndex = 0;
         }
-
         List<Edge<Post>> edges = getPostsWithCursor(cursor).stream()
                 .map(post -> new DefaultEdge<>(post, cursorUtil.createCursorWith(post.getId())))
                 .limit(first)
                 .collect(Collectors.toList());
-
 
         var pageInfo = new DefaultPageInfo(
                 cursorUtil.getFirstCursorFrom(edges),
@@ -113,10 +144,24 @@ public class PostService {
         return new DefaultConnection<>(edges, pageInfo);
     }
 
-    private boolean hasNextPage(int originalListSize, int cursorIndex, int first) {
+    /**
+     * Check if the list of post can load a next page.
+     *
+     * @param originalListSize Integer size of the hole list.
+     * @param cursorIndex      Integer Index of the cursor post.
+     * @param first            Integer How many you want to load for the next page.
+     * @return Boolean
+     */
+    private Boolean hasNextPage(Integer originalListSize, Integer cursorIndex, Integer first) {
         return cursorIndex + 1 + first < originalListSize;
     }
 
+    /**
+     * Fetches a list of post depending on the cursor.
+     *
+     * @param cursor String
+     * @return List<Post>
+     */
     private List<Post> getPostsWithCursor(@Nullable String cursor) {
         List<Post> posts;
         if (cursor == null) {
@@ -129,6 +174,12 @@ public class PostService {
         return posts;
     }
 
+    /**
+     * Fetches a list of post, after the id that is sent in as parameter.
+     *
+     * @param id UUID id of the post.
+     * @return List<Post>
+     */
     private List<Post> getPostsAfter(UUID id) {
         List<Post> posts = getPosts();
         cursorIndex = getCursorIndex(posts, id);
@@ -136,16 +187,33 @@ public class PostService {
         return dropPostBeforeCursor(posts, id);
     }
 
+    /**
+     * Gets the index of the cursor of the list.
+     *
+     * @param list List<Post> list in which to find the index.
+     * @param id   UUID id of the post to find the index of.
+     * @return Integer.
+     */
     private Integer getCursorIndex(List<Post> list, UUID id) {
         return IntStream.range(0, list.size()).filter(i -> list.get(i).getId().equals(id))
                 .findFirst()
                 .orElse(0);
     }
 
+    /**
+     * Resets the cursor index.
+     */
     private void resetCursorIndex() {
         cursorIndex = 0;
     }
 
+    /**
+     * Drops all the posts in a list before and id.
+     *
+     * @param list List<Post> list of which to drop from.
+     * @param id   UUID id of the post to drop before.
+     * @return List<Post>
+     */
     private List<Post> dropPostBeforeCursor(List<Post> list, UUID id) {
         return list.stream()
                 .dropWhile(post -> post.getId().compareTo(id) != 0)
@@ -180,7 +248,7 @@ public class PostService {
      */
     public boolean isBookmarkedByUser(BookmarkInput input) {
         log.info("Checking post bookmarked for user");
-        return bookmarkRepo.existsByUserIdAndAndPostId(input.getUserId(), input.getPostId());
+        return bookmarkRepo.existsByUserIdAndPostId(input.getUserId(), input.getPostId());
     }
 
     /**
@@ -202,6 +270,12 @@ public class PostService {
         return "";
     }
 
+    /**
+     * Deletes a post.
+     *
+     * @param postInput PostInput information about the post to delete.
+     * @return Boolean.
+     */
     @Transactional
     public Boolean deletePost(PostInput postInput) {
 
@@ -224,7 +298,7 @@ public class PostService {
         try {
             serviceHelper.deleteImage(post);
         } catch (Exception e) {
-           log.error("No image to delete");
+            log.error("No image to delete");
         }
         postRepo.delete(post);
         log.info("Post deleted: {}", post.getId());

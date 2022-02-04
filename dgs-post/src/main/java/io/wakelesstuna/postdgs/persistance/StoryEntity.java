@@ -29,6 +29,11 @@ public class StoryEntity {
     private String storyUrl;
     private LocalDateTime createdAt;
 
+    /**
+     * Maps the StoryEntity to the graphql type {@link Story}.
+     *
+     * @return Story.
+     */
     public Story mapToStoryType() {
         return Story.newBuilder()
                 .id(this.id)

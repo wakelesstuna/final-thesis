@@ -16,7 +16,6 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * This class is the DataFetcher for {@link Comment}.
- * It handles the mutations of the Comment type.
  *
  * @author oscar.steen.forss
  */

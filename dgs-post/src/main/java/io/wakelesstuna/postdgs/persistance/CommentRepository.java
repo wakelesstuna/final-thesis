@@ -29,9 +29,22 @@ public interface CommentRepository extends JpaRepository<CommentEntity, UUID> {
      */
     Optional<CommentEntity> findByPostIdAndId(UUID postId, UUID id);
 
+    /**
+     * Finds a list of commentEntity based on the post id.
+     *
+     * @param postId UUID id of the post to find bookmarks for.
+     * @return List of BookmarkEntity.
+     */
     List<CommentEntity> findAllByPostId(UUID postId);
 
+    /**
+     * Finds a list of commentEntity based on a list of post ids.
+     *
+     * @param ids list of UUID for a posts.
+     * @return List of BookmarkEntity.
+     */
     List<CommentEntity> findAllByPostIdIn(List<UUID> ids);
+
     /**
      * Deletes all {@link CommentEntity} by user id.
      *

@@ -33,7 +33,7 @@ public class BookmarkDataLoader implements MappedBatchLoader<UUID, List<Post>> {
 
     /**
      * This method will be called once, even if multiple datafetchers use the load() method on the DataLoader.
-     * This way reviews can be loaded for all the Shows in a single call instead of per individual Show.
+     * This way posts can be loaded for all the bookmarks in a single call instead of per individual Bookmark.
      */
     @Override
     public CompletionStage<Map<UUID, List<Post>>> load(Set<UUID> ids) {

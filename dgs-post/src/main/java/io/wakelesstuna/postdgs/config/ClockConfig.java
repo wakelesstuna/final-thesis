@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import java.time.Clock;
 
 /**
- * Clock config for the application
+ * Clock config for the application.
  *
  * @author oscar.steen.forss
  */

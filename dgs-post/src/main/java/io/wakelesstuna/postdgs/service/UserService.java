@@ -1,6 +1,7 @@
 package io.wakelesstuna.postdgs.service;
 
 import com.netflix.graphql.dgs.DgsComponent;
+import io.wakelesstuna.post.generated.types.User;
 import io.wakelesstuna.postdgs.persistance.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,8 @@ import javax.transaction.Transactional;
 import java.util.UUID;
 
 /**
+ * This is a service class that handle the logic for the {@link User}.
+ *
  * @author oscar.steen.forss
  */
 @DgsComponent

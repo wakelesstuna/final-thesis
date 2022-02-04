@@ -53,20 +53,15 @@ public class RequestLoggingInstrumentation extends SimpleInstrumentation {
             } else {
                 log.warn("Failed in: {}", duration, throwable);
             }
-            // If we have async resolvers, this callback can occur in the thread-pool and not the NIO thread.
-            // In that case, the LoggingListener will be used as a fallback to clear the NIO thread.
-            //MDC.clear();
         });
     }
 
 
     @Override
     public DataFetcher<?> instrumentDataFetcher(DataFetcher<?> dataFetcher, InstrumentationFieldFetchParameters parameters) {
-        // We only care about user code
         if (parameters.isTrivialDataFetcher()) {
             return dataFetcher;
         }
-
         return environment -> {
             long startTime = System.currentTimeMillis();
             Object result = dataFetcher.get(environment);

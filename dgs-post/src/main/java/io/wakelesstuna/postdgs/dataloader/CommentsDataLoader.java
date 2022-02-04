@@ -31,6 +31,10 @@ public class CommentsDataLoader implements MappedBatchLoader<UUID, List<Comment>
             ExecutionIdPropagationExecutor.wrap(
                     Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()));
 
+    /**
+     * This method will be called once, even if multiple datafetchers use the load() method on the DataLoader.
+     * This way Comments can be loaded for all the Post in a single call instead of per individual Post.
+     */
     @Override
     public CompletionStage<Map<UUID, List<Comment>>> load(Set<UUID> ids) {
         return CompletableFuture.supplyAsync(() ->

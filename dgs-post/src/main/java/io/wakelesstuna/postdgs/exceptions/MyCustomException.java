@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 /**
+ * Custom general exception to be extended to other custom exceptions.
+ *
  * @author oscar.steen.forss
  */
 @Builder
@@ -15,10 +17,8 @@ import org.springframework.http.HttpStatus;
 @NoArgsConstructor
 @Getter
 public class MyCustomException extends RuntimeException {
-
     private String message;
     private HttpStatus httpStatus;
     private int statusCode;
     private ErrorType errorType;
-
 }
