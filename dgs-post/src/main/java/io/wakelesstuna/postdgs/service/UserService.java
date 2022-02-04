@@ -23,6 +23,12 @@ public class UserService {
     private final BookmarkRepository bookmarkRepo;
     private final StoryRepository storyRepo;
 
+    /**
+     * Deletes all the information about a user on the post server.
+     *
+     * @param userId UUID id of the user.
+     * @return String
+     */
     @Transactional
     public String deleteUserInformation(UUID userId) {
         postRepo.deleteAllByUserId(userId);
