@@ -30,6 +30,8 @@ public interface CommentRepository extends JpaRepository<CommentEntity, UUID> {
     Optional<CommentEntity> findByPostIdAndId(UUID postId, UUID id);
 
     List<CommentEntity> findAllByPostId(UUID postId);
+
+    List<CommentEntity> findAllByPostIdIn(List<UUID> ids);
     /**
      * Deletes all {@link CommentEntity} by user id.
      *

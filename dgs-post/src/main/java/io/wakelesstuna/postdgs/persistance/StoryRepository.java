@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface StoryRepository extends JpaRepository<StoryEntity, UUID> {
     List<StoryEntity> findAllByUserId(UUID id);
     Optional<StoryEntity> findByUserIdAndId(UUID userId, UUID id);
+    List<StoryEntity> findAllByUserIdIn(List<UUID> ids);
+    void deleteAllByUserId(UUID id);
 }

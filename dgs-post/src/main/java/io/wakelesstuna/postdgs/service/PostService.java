@@ -153,10 +153,19 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Makes one query to the database to fetch all post for all the users in the id list.
+     * Then map those to a Map where the ids of the users are the keys and the values are
+     * a list of their posts.
+     *
+     * @param userIds ids of users to fetch posts for
+     * @return Map<UUID, List<Post>>
+     */
     public Map<UUID, List<Post>> postsForUsers(List<UUID> userIds) {
+        List<PostEntity> allByUserIds = postRepo.findByUserIdIn(userIds);
         return userIds.stream()
                 .collect(Collectors.toConcurrentMap(Function.identity(),
-                        id -> postRepo.findAllByUserId(id).stream()
+                        id -> allByUserIds.stream().filter(p -> p.getUserId().equals(id))
                                 .map(PostEntity::mapToPostType)
                                 .collect(Collectors.toList()),
                         (a, b) -> a,

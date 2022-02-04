@@ -3,6 +3,7 @@ package io.wakelesstuna.postdgs.persistance;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.awt.print.Book;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,8 +35,10 @@ public interface BookmarkRepository extends JpaRepository<BookmarkEntity, UUID> 
 
     boolean existsByUserIdAndAndPostId(UUID userId, UUID postId);
 
-    List<BookmarkEntity> findAllByUserId(UUID userId);
     List<BookmarkEntity> findAllByPostId(UUID postId);
+    List<BookmarkEntity> findAllByUserIdIn(List<UUID> ids);
+
+    void deleteAllByUserId(UUID id);
 }
 
 

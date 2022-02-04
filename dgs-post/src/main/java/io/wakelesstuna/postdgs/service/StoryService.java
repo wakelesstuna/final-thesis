@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class StoryService {
 
     private final ServiceHelper serviceHelper;
-    private final StoryRepository storyRepository;
+    private final StoryRepository storyRepo;
 
     public Story createStory(CreateStoryInput createStoryInput) {
         StoryEntity story = StoryEntity.builder()
@@ -34,15 +34,16 @@ public class StoryService {
                 .createdAt(serviceHelper.getLocalDateTime())
                 .build();
 
-        storyRepository.saveAndFlush(story);
+        storyRepo.saveAndFlush(story);
         log.info("Created new story");
         return story.mapToStoryType();
     }
 
     public Map<UUID, List<Story>> storiesForUsers(ArrayList<UUID> userIds) {
+        List<StoryEntity> allByUserIds = storyRepo.findAllByUserIdIn(userIds);
         return userIds.stream()
                 .collect(Collectors.toConcurrentMap(Function.identity(),
-                        id -> storyRepository.findAllByUserId(id).stream()
+                        id -> allByUserIds.stream().filter(p -> p.getUserId().equals(id))
                 .map(StoryEntity::mapToStoryType)
                 .collect(Collectors.toList()),
                         (a,b) -> a,
@@ -51,7 +52,7 @@ public class StoryService {
 
     public List<Story> getStories() {
         log.info("Fetching all stories");
-        return storyRepository.findAll().stream()
+        return storyRepo.findAll().stream()
                 .map(StoryEntity::mapToStoryType)
                 .sorted(Comparator.comparing(Story::getCreatedAt).reversed())
                 .collect(Collectors.toList());
@@ -60,9 +61,9 @@ public class StoryService {
 
 
     public String deleteStory(StoryInput storyInput) {
-        StoryEntity storyToDelete = storyRepository.findByUserIdAndId(storyInput.getUserId(), storyInput.getStoryId()).orElseThrow(() -> new NoSuchElementException("No story found"));
+        StoryEntity storyToDelete = storyRepo.findByUserIdAndId(storyInput.getUserId(), storyInput.getStoryId()).orElseThrow(() -> new NoSuchElementException("No story found"));
 
-        storyRepository.delete(storyToDelete);
+        storyRepo.delete(storyToDelete);
         log.info("Story deleted");
         return HttpStatus.ACCEPTED.toString();
     }

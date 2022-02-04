@@ -38,4 +38,6 @@ type Mutation {
     createStory(createStoryInput: CreateStoryInput): Story
     # Deletes a story
     deleteStory(storyInput: StoryInput): String
+    # Deletes all user information
+    deleteUserInformation(userId: UUID): String
 }

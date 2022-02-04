@@ -1,6 +1,8 @@
 package io.wakelesstuna.userdgs.services;
 
 import com.netflix.graphql.dgs.DgsComponent;
+import com.netflix.graphql.dgs.client.GraphQLClient;
+import com.netflix.graphql.dgs.client.GraphQLResponse;
 import graphql.GraphQLException;
 import io.wakelesstuna.user.generated.types.*;
 import io.wakelesstuna.userdgs.persistence.FollowRepository;
@@ -12,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -32,6 +35,7 @@ public class UserService {
     private final ServiceHelper serviceHelper;
     private final FollowRepository followRepo;
     private final UserRepository userRepo;
+    private final GraphQLClient postClient;
 
     /**
      * Fetching all User entities from the database an maps them
@@ -174,6 +178,9 @@ public class UserService {
     public String deleteUser(AuthUserInput authUserInput) {
         var userToDelete = serviceHelper.getUser(authUserInput.getUserId());
         // TODO: 2021-12-13 Kolla att lösenordet stämmer innan delete utför
+        if(!userToDelete.getPassword().equals(authUserInput.getPassword())) {
+            throw new GraphQLException("Wrong password");
+        }
         var userId = userToDelete.getId();
 
         // delete all follows
@@ -182,6 +189,8 @@ public class UserService {
         // delete all followings
         followRepo.deleteAllByFollowId(userId);
         log.info("Deleting all followers of user");
+
+        deleteUserPostsInformation(userId);
 
         // delete user
         log.info("Deleting user");
@@ -194,21 +203,21 @@ public class UserService {
     /**
      * Sends a delete request to the post service.
      */
-    public void sendDeleteRequest() {
-        // TODO: 2022-01-13 send request to post service to delete all posts
-        // delete all post
-        // postRepo.deleteAllByUserId(userId);
-        log.info("Deleting all posts of user");
+    public void deleteUserPostsInformation(UUID userId) {
 
-        // TODO: 2022-01-13 send request to post service to delete all likes
-        // delete all likes
-        // likeRepo.deleteAllByUserId(userId);
-        log.info("Deleting all likes of user");
+        String query = String.format(
+                "mutation {" +
+                "  deleteUserInformation(userId: \"%s\")" +
+                "}", userId);
 
-        // TODO: 2022-01-13 send request to post service to delete all comments
-        // delete all comments
-        // commentRepo.deleteAllByUserId(userId);
-        log.info("Deleting all comments of user");
+        GraphQLResponse graphQLResponse = postClient.executeQuery(query, new HashMap<>());
+        String response = graphQLResponse.extractValueAsObject("deleteUserInformation", String.class);
+        if (!response.equals(HttpStatus.ACCEPTED.getReasonPhrase())) {
+            final String msg = "Could not delete post information about the user!";
+            log.error(msg);
+            throw new GraphQLException(msg);
+        }
+        log.info("Delete request to post service success!");
     }
 
     /**

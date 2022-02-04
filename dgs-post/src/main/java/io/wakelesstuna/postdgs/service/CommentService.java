@@ -13,12 +13,12 @@ import io.wakelesstuna.postdgs.persistance.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -82,15 +82,13 @@ public class CommentService {
      * @return Map of the result of the search with ids as keys and a list of comments as value.
      */
     public Map<UUID, List<Comment>> commentsForPosts(List<UUID> postIds) {
-        Map<UUID, List<Comment>> map = new ConcurrentHashMap<>();
-        for (UUID id : postIds) {
-            List<Comment> comments = commentRepo.findAllByPostId(id).stream()
-                    .map(CommentEntity::mapToCommentType)
-                    .collect(Collectors.toList());
-            map.put(id, comments);
-        }
-        log.info("In service: {}", map);
-        return map;
+        List<CommentEntity> allByPostIds = commentRepo.findAllByPostIdIn(postIds);
+        return postIds.stream()
+                .collect(Collectors.toConcurrentMap(Function.identity(),
+                        id -> allByPostIds.stream().filter(c -> c.getPostId().equals(id))
+                                .map(CommentEntity::mapToCommentType)
+                                .collect(Collectors.toList())
+                        , (a, b) -> a, ConcurrentHashMap::new));
     }
 
     /**

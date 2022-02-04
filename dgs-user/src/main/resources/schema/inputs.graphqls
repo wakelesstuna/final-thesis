@@ -30,6 +30,7 @@ input UpdatePasswordInput {
 
 # Input for authenticate a user.
 input AuthUserInput {
+    userId: UUID
     username: String! # String required.
     password: String! # String required.
 }

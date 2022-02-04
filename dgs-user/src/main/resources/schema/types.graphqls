@@ -6,6 +6,7 @@ type User @key(fields : "id"){
     phone: String # Returns the phone number of the user.
     email: String # Returns the email of the user.
     username: String # Returns the username of the user.
+    password: String
     profilePic: String # Returns a download URL for the user profile image.
     description: String # Returns a description of the user.
     createdAt: DateTime # Returns a datetime of when the user were created.

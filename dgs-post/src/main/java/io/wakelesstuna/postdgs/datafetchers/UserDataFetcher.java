@@ -13,6 +13,7 @@ import io.wakelesstuna.postdgs.dataloader.PostDataLoader;
 import io.wakelesstuna.postdgs.dataloader.StoriesDataLoader;
 import io.wakelesstuna.postdgs.service.BookmarkService;
 import io.wakelesstuna.postdgs.service.PostService;
+import io.wakelesstuna.postdgs.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.dataloader.DataLoader;
 
@@ -32,6 +33,7 @@ public class UserDataFetcher {
 
     private final PostService postService;
     private final BookmarkService bookmarkService;
+    private final UserService userService;
 
     @DgsEntityFetcher(name = DgsConstants.USER.TYPE_NAME)
     public User user(Map<String, Object> values) {
@@ -71,6 +73,11 @@ public class UserDataFetcher {
         DataLoader<UUID, Story> dataloader = dfe.getDataLoader(StoriesDataLoader.class);
         User user = dfe.getSource();
         return dataloader.load(user.getId());
+    }
+
+    @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, field = DgsConstants.MUTATION.DeleteUserInformation)
+    public String deleteUserInformation(UUID userId) {
+        return userService.deleteUserInformation(userId);
     }
 
 }

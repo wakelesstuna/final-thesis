@@ -6,7 +6,7 @@ import io.wakelesstuna.post.generated.DgsConstants;
 import io.wakelesstuna.post.generated.types.Post;
 import io.wakelesstuna.postdgs.instrumentation.ExecutionIdPropagationExecutor;
 import io.wakelesstuna.postdgs.service.PostService;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.dataloader.MappedBatchLoader;
 
 import java.util.*;
@@ -18,7 +18,7 @@ import java.util.concurrent.Executors;
 /**
  * @author oscar.steen.forss
  */
-@RequiredArgsConstructor
+@AllArgsConstructor
 @DgsComponent
 @DgsDataLoader(name = DgsConstants.USER.Posts)
 public class PostDataLoader implements MappedBatchLoader<UUID, List<Post>> {
@@ -27,8 +27,7 @@ public class PostDataLoader implements MappedBatchLoader<UUID, List<Post>> {
 
     private static final Executor postsThreadPool =
             ExecutionIdPropagationExecutor.wrap(
-                    Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
-            );
+                    Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()));
 
     @Override
     public CompletionStage<Map<UUID, List<Post>>> load(Set<UUID> ids) {

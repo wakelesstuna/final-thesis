@@ -1,5 +1,6 @@
 package io.wakelesstuna.userdgs.services;
 
+import com.netflix.graphql.dgs.client.GraphQLClient;
 import graphql.GraphQLException;
 import io.wakelesstuna.user.generated.types.*;
 import io.wakelesstuna.userdgs.exceptions.MyCustomException;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +41,8 @@ class UserServiceTest {
     FollowRepository followRepo;
     @Mock
     UserRepository userRepo;
+    @MockBean
+    GraphQLClient postClient;
 
     UUID userOneId = UUID.fromString("473eea09-69f7-40bf-bea0-f3380e926ecd");
     UUID userTwoId = UUID.fromString("c203fdae-b889-41c0-8f2f-712e95a1efd6");
@@ -49,7 +53,7 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        userService = new UserService(serviceHelper, followRepo, userRepo);
+        userService = new UserService(serviceHelper, followRepo, userRepo, postClient);
 
         user = UserEntity.builder()
                 .id(userOneId)
@@ -560,6 +564,6 @@ class UserServiceTest {
     @Test
     void sendDeleteRequest() {
         // TODO: 2022-01-26 Fix this test
-        userService.sendDeleteRequest();
+       // userService.deleteUserPostsInformation();
     }
 }

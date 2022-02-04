@@ -45,7 +45,7 @@ public class RequestLoggingInstrumentation extends SimpleInstrumentation {
         // Add the execution ID to the NIO thread
         MDC.put(EXECUTION_ID, parameters.getExecutionInput().getExecutionId().toString());
 
-        log.info("Query: {} with variables: {}", parameters.getQuery(), parameters.getVariables());
+        log.info("Query: {} with variables: {}, operation: {}", parameters.getQuery(), parameters.getVariables(), parameters.getOperation());
         return SimpleInstrumentationContext.whenCompleted((executionResult, throwable) -> {
             var duration = Duration.between(start, Instant.now(clock));
             if (throwable == null) {

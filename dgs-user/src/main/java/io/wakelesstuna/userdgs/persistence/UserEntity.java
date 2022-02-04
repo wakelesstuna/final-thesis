@@ -50,7 +50,6 @@ public class UserEntity {
                 .phone(this.phone)
                 .email(this.email)
                 .description(this.description)
-                .password(this.password)
                 .profilePic(this.profilePic)
                 .createdAt(this.createdAt)
                 .build();

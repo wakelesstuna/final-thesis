@@ -7,6 +7,7 @@ import io.wakelesstuna.post.generated.types.Post;
 import io.wakelesstuna.postdgs.dataloader.BookmarkDataLoader;
 import io.wakelesstuna.postdgs.persistance.BookmarkEntity;
 import io.wakelesstuna.postdgs.persistance.BookmarkRepository;
+import io.wakelesstuna.postdgs.persistance.PostEntity;
 import io.wakelesstuna.postdgs.persistance.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -100,16 +101,13 @@ public class BookmarkService {
      */
     @Transactional
     public Map<UUID, List<Post>> bookmarksForUsers(List<UUID> userIds) {
-        log.info("Loading bookmarks for {} users", userIds.size());
-
+        List<BookmarkEntity> allByUserIds = bookmarkRepo.findAllByUserIdIn(userIds);
         return userIds.stream()
                 .collect(Collectors.toConcurrentMap(Function.identity(),
-                        id -> new ArrayList<>(bookmarkRepo.findAllByUserId(id)).stream()
+                        id -> allByUserIds.stream().filter(b -> b.getUserId().equals(id))
                                 .map(b -> postRepo.getById(b.getPostId()).mapToPostType())
                                 .collect(Collectors.toList()),
                         (a, b) -> a,
                         ConcurrentHashMap::new));
     }
-
-
 }

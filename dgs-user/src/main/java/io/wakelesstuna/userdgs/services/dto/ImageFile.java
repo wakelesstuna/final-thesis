@@ -1,7 +1,7 @@
 package io.wakelesstuna.userdgs.services.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -10,9 +10,10 @@ import java.util.UUID;
  *
  * @author oscar.steen.forss
  */
-
 @Builder
-@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class ImageFile {
     UUID userId;
     String url;
@@ -20,4 +21,14 @@ public class ImageFile {
     String fileType;
     Long fileSize;
     byte[] data;
+
+    @JsonCreator
+    public ImageFile(UUID userId, String url, String fileName, String fileType, Long fileSize, byte[] data) {
+        this.userId = userId;
+        this.url = url;
+        this.fileName = fileName;
+        this.fileType = fileType;
+        this.fileSize = fileSize;
+        this.data = data;
+    }
 }
