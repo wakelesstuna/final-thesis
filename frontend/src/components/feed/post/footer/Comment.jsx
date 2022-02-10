@@ -10,7 +10,6 @@ import { BsTrash } from "react-icons/bs";
 import { deleteComment_gql } from "../../../../graphql/mutation";
 
 const Comment = ({ comment, post, refetchComments }) => {
-  console.log("Comment: ", post);
   const { id, username } = useRecoilValue(atomUser);
 
   const [deleteCommentMutation] = useMutation(deleteComment_gql);

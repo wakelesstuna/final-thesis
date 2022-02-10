@@ -92,6 +92,7 @@ const HeaderInfoStyle = styled.div`
 
 const UsernameWrapper = styled.div`
   display: flex;
+  margin-bottom: 1em;
 `;
 
 const FollowButton = styled.button`
