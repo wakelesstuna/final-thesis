@@ -32,7 +32,7 @@ public class CommentDataFetcher {
                 .build();
     }
 
-    @DgsData(parentType = DgsConstants.COMMENT.TYPE_NAME, field = DgsConstants.COMMENT.User)
+    @DgsData(parentType = DgsConstants.COMMENT.TYPE_NAME)
     public User user(DgsDataFetchingEnvironment dfe) {
         Comment comment = dfe.getSource();
         return serviceHelper.getUser(comment.getUserId()).mapToUserType();

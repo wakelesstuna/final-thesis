@@ -28,12 +28,12 @@ public class UserDataFetcher {
     private final UserService userService;
     private final FollowService followService;
 
-    @DgsData(parentType = DgsConstants.QUERY_TYPE,field = DgsConstants.QUERY.User)
+    @DgsQuery
     public User user(@InputArgument UUID id) {
         return userService.getUser(id);
     }
 
-    @DgsQuery(field = DgsConstants.QUERY.Users)
+    @DgsQuery
     public List<User> users(@InputArgument String usernameFilter) {
         List<User> userList = userService.getUsers();
         if (usernameFilter == null) return userList;
@@ -42,90 +42,90 @@ public class UserDataFetcher {
                 .collect(Collectors.toList());
     }
 
-    @DgsQuery(field = DgsConstants.QUERY.FetchRandomUsers)
-    public List<User> getRandomUser(@InputArgument Integer howMany, @InputArgument String username) {
+    @DgsQuery
+    public List<User> fetchRandomUsers(@InputArgument Integer howMany, @InputArgument String username) {
         return userService.getRandomUsers(howMany, username);
     }
 
-    @DgsMutation(field = DgsConstants.MUTATION.CreateUser)
+    @DgsMutation
     public User createUser(@InputArgument CreateUserInput createUserInput, DgsDataFetchingEnvironment dfe) {
         MultipartFile file = dfe.getArgument("input");
         return userService.createUser(createUserInput, file);
     }
 
-    @DgsMutation(field = DgsConstants.MUTATION.UpdateUser)
+    @DgsMutation
     public User updateUser(@InputArgument UpdateUserInput updateUserInput, DgsDataFetchingEnvironment dfe) {
         MultipartFile file = dfe.getArgument("input");
         return userService.updateUser(updateUserInput, file);
     }
 
-    @DgsMutation(field = DgsConstants.MUTATION.UpdatePassword)
+    @DgsMutation
     public Boolean updatePassword(@InputArgument UpdatePasswordInput updatePasswordInput) {
         return userService.updatePassword(updatePasswordInput);
     }
 
-    @DgsMutation(field = DgsConstants.MUTATION.AuthUser)
+    @DgsMutation
     public User authUser(@InputArgument AuthUserInput authUserInput) {
         return userService.authenticateUser(authUserInput);
     }
 
-    @DgsMutation(field = DgsConstants.MUTATION.DeleteUser)
+    @DgsMutation
     public String deleteUser(@InputArgument AuthUserInput authUserInput) {
         return userService.deleteUser(authUserInput);
     }
 
-    @DgsMutation(field = DgsConstants.MUTATION.FollowUser)
+    @DgsMutation
     public String followUser(@InputArgument FollowInput followInput) {
         return followService.followUser(followInput);
     }
 
-    @DgsMutation(field = DgsConstants.MUTATION.UnFollowUser)
+    @DgsMutation
     public String unFollowUser(@InputArgument FollowInput followInput) {
         return followService.unFollowUser(followInput);
     }
 
-    @DgsData(parentType = DgsConstants.USER.TYPE_NAME, field = DgsConstants.USER.TotalFollowing)
+    @DgsData(parentType = DgsConstants.USER.TYPE_NAME)
     public Integer totalFollowing(DgsDataFetchingEnvironment dfe) {
         User user = dfe.getSource();
         return followService.getTotalFollowing(user.getId());
     }
 
-    @DgsData(parentType = DgsConstants.USER.TYPE_NAME, field = DgsConstants.USER.Following)
+    @DgsData(parentType = DgsConstants.USER.TYPE_NAME)
     public CompletableFuture<User> following(DgsDataFetchingEnvironment dfe) {
         DataLoader<UUID, User> dataLoader = dfe.getDataLoader(FollowingDataLoader.class);
         User user = dfe.getSource();
         return dataLoader.load(user.getId());
     }
 
-    @DgsData(parentType = DgsConstants.USER.TYPE_NAME, field = DgsConstants.USER.TotalFollowers)
+    @DgsData(parentType = DgsConstants.USER.TYPE_NAME)
     public Integer totalFollowers(DgsDataFetchingEnvironment dfe) {
         User user = dfe.getSource();
         return followService.getTotalFollowers(user.getId());
     }
 
-    @DgsData(parentType = DgsConstants.USER.TYPE_NAME, field = DgsConstants.USER.Followers)
+    @DgsData(parentType = DgsConstants.USER.TYPE_NAME)
     public CompletableFuture<User> followers(DgsDataFetchingEnvironment dfe) {
         DataLoader<UUID, User> dataLoader = dfe.getDataLoader(FollowersDataLoader.class);
         User user = dfe.getSource();
         return dataLoader.load(user.getId());
     }
 
-    @DgsQuery(field = DgsConstants.QUERY.UserExitsById)
+    @DgsQuery
     public Boolean userExitsById(@InputArgument UUID id) {
         return userService.userExitsById(id);
     }
 
-    @DgsQuery(field = DgsConstants.QUERY.ExitsByUsername)
+    @DgsQuery
     public Boolean exitsByUsername(@InputArgument String username) {
         return userService.exitsByUsername(username);
     }
 
-    @DgsQuery(field = DgsConstants.QUERY.ExitsByEmail)
+    @DgsQuery
     public Boolean exitsByEmail(@InputArgument String email) {
         return userService.exitsByEmail(email);
     }
 
-    @DgsQuery(field = DgsConstants.QUERY.ExitsByPhone)
+    @DgsQuery
     public Boolean exitsByPhone(@InputArgument String phone) {
         return userService.exitsByPhone(phone);
     }

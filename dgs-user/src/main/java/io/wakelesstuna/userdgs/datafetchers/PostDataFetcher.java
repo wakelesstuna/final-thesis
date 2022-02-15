@@ -32,7 +32,7 @@ public class PostDataFetcher {
                 .build();
     }
 
-    @DgsData(parentType = DgsConstants.POST.TYPE_NAME, field = DgsConstants.POST.User)
+    @DgsData(parentType = DgsConstants.POST.TYPE_NAME)
     public User user(DgsDataFetchingEnvironment dfe) {
         Post post = dfe.getSource();
         return serviceHelper.getUser(post.getUserId()).mapToUserType();

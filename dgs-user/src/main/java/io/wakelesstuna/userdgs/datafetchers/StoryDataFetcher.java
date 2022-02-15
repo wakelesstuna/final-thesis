@@ -32,7 +32,7 @@ public class StoryDataFetcher {
                 .build();
     }
 
-    @DgsData(parentType = DgsConstants.STORY.TYPE_NAME, field = DgsConstants.STORY.User)
+    @DgsData(parentType = DgsConstants.STORY.TYPE_NAME)
     public User user(DgsDataFetchingEnvironment dfe) {
         Story story = dfe.getSource();
         return serviceHelper.getUser(story.getUserId()).mapToUserType();
