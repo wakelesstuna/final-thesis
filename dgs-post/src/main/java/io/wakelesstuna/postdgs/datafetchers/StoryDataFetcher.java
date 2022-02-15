@@ -1,14 +1,13 @@
 package io.wakelesstuna.postdgs.datafetchers;
 
-import com.netflix.graphql.dgs.DgsComponent;
-import com.netflix.graphql.dgs.DgsData;
-import com.netflix.graphql.dgs.InputArgument;
+import com.netflix.graphql.dgs.*;
 import io.wakelesstuna.post.generated.DgsConstants;
 import io.wakelesstuna.post.generated.types.CreateStoryInput;
 import io.wakelesstuna.post.generated.types.Story;
 import io.wakelesstuna.post.generated.types.StoryInput;
 import io.wakelesstuna.postdgs.service.StoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -23,17 +22,17 @@ public class StoryDataFetcher {
 
     private final StoryService storyService;
 
-    @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, field = DgsConstants.MUTATION.CreateStory)
+    @DgsMutation
     public Story createStory(@InputArgument CreateStoryInput createStoryInput) {
         return storyService.createStory(createStoryInput);
     }
 
-    @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, field = DgsConstants.MUTATION.DeleteStory)
+    @DgsMutation
     public String deleteStory(@InputArgument StoryInput storyInput) {
         return storyService.deleteStory(storyInput);
     }
 
-    @DgsData(parentType = DgsConstants.QUERY.TYPE_NAME, field = DgsConstants.QUERY.Stories)
+    @DgsQuery
     public List<Story> stories() {
         return storyService.getStories();
     }

@@ -25,23 +25,23 @@ public class CommentDataFetcher {
 
     private final CommentService commentService;
 
-    @DgsMutation(field = DgsConstants.MUTATION.CreateComment)
+    @DgsMutation
     public Comment createComment(@InputArgument CreateCommentInput createCommentInput) {
         return commentService.createComment(createCommentInput);
     }
 
-    @DgsMutation(field = DgsConstants.MUTATION.DeleteComment)
+    @DgsMutation
     public String deleteComment(@InputArgument CommentInput commentInput) {
         return commentService.deleteComment(commentInput);
     }
 
-    @DgsData(parentType = DgsConstants.POST.TYPE_NAME, field = DgsConstants.POST.TotalComments)
+    @DgsData(parentType = DgsConstants.POST.TYPE_NAME)
     public Integer totalComments(DgsDataFetchingEnvironment dfe) {
         Post post = dfe.getSource();
         return commentService.getTotalComments(post.getId());
     }
 
-    @DgsData(parentType = DgsConstants.POST.TYPE_NAME, field = DgsConstants.POST.Comments)
+    @DgsData(parentType = DgsConstants.POST.TYPE_NAME)
     public CompletableFuture<Comment> comments(DgsDataFetchingEnvironment dfe) {
         DataLoader<UUID, Comment> dataLoader = dfe.getDataLoader(CommentsDataLoader.class);
         Post post = dfe.getSource();

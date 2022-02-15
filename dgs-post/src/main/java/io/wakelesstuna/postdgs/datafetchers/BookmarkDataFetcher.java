@@ -22,17 +22,17 @@ public class BookmarkDataFetcher {
     private final BookmarkService bookmarkService;
     private final PostService postService;
 
-    @DgsMutation(field = DgsConstants.MUTATION.BookmarkPost)
+    @DgsMutation
     public String bookmarkPost(@InputArgument BookmarkInput bookmarkInput) {
         return bookmarkService.bookmarkPost(bookmarkInput);
     }
 
-    @DgsMutation(field = DgsConstants.MUTATION.UnBookmarkPost)
+    @DgsMutation
     public String unBookmarkPost(@InputArgument BookmarkInput bookmarkInput) {
         return bookmarkService.unBookmarkPost(bookmarkInput);
     }
 
-    @DgsQuery(field = DgsConstants.QUERY.IsBookmarked)
+    @DgsQuery
     public boolean isBookmarked(@InputArgument BookmarkInput bookmarkInput) {
         return postService.isBookmarkedByUser(bookmarkInput);
     }

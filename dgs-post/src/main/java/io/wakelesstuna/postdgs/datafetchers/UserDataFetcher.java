@@ -1,9 +1,6 @@
 package io.wakelesstuna.postdgs.datafetchers;
 
-import com.netflix.graphql.dgs.DgsComponent;
-import com.netflix.graphql.dgs.DgsData;
-import com.netflix.graphql.dgs.DgsDataFetchingEnvironment;
-import com.netflix.graphql.dgs.DgsEntityFetcher;
+import com.netflix.graphql.dgs.*;
 import io.wakelesstuna.post.generated.DgsConstants;
 import io.wakelesstuna.post.generated.types.Post;
 import io.wakelesstuna.post.generated.types.Story;
@@ -42,41 +39,41 @@ public class UserDataFetcher {
                 .build();
     }
 
-    @DgsData(parentType = DgsConstants.USER.TYPE_NAME, field = DgsConstants.USER.TotalPosts)
+    @DgsData(parentType = DgsConstants.USER.TYPE_NAME)
     public Integer totalPosts(DgsDataFetchingEnvironment dfe) {
         User user = dfe.getSource();
         return postService.getTotalPostOfUser(user.getId());
     }
 
-    @DgsData(parentType = DgsConstants.USER.TYPE_NAME, field = DgsConstants.USER.Posts)
+    @DgsData(parentType = DgsConstants.USER.TYPE_NAME)
     public CompletableFuture<Post> posts(DgsDataFetchingEnvironment dfe) {
         DataLoader<UUID, Post> dataLoader = dfe.getDataLoader(PostDataLoader.class);
         User user = dfe.getSource();
         return dataLoader.load(user.getId());
     }
 
-    @DgsData(parentType = DgsConstants.USER.TYPE_NAME, field = DgsConstants.USER.TotalBookmarks)
+    @DgsData(parentType = DgsConstants.USER.TYPE_NAME)
     public Integer totalBookmarks(DgsDataFetchingEnvironment dfe) {
         User user = dfe.getSource();
         return bookmarkService.getTotalBookmarks(user.getId());
     }
 
-    @DgsData(parentType = DgsConstants.USER.TYPE_NAME, field = DgsConstants.USER.Bookmarks)
+    @DgsData(parentType = DgsConstants.USER.TYPE_NAME)
     public CompletableFuture<Post> bookmarks(DgsDataFetchingEnvironment dfe) {
         DataLoader<UUID, Post> dataLoader = dfe.getDataLoader(BookmarkDataLoader.class);
         User user = dfe.getSource();
         return dataLoader.load(user.getId());
     }
 
-    @DgsData(parentType = DgsConstants.USER.TYPE_NAME, field = DgsConstants.USER.Stories)
+    @DgsData(parentType = DgsConstants.USER.TYPE_NAME)
     public CompletableFuture<Story> stories(DgsDataFetchingEnvironment dfe) {
         DataLoader<UUID, Story> dataloader = dfe.getDataLoader(StoriesDataLoader.class);
         User user = dfe.getSource();
         return dataloader.load(user.getId());
     }
 
-    @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, field = DgsConstants.MUTATION.DeleteUserInformation)
-    public String deleteUserInformation(UUID userId) {
+    @DgsMutation
+    public String deleteUserInformation(@InputArgument UUID userId) {
         return userService.deleteUserInformation(userId);
     }
 

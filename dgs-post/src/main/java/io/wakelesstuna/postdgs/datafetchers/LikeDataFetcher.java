@@ -18,7 +18,7 @@ public class LikeDataFetcher {
 
     private final LikeService likeService;
 
-    @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, field = DgsConstants.MUTATION.LikePost)
+    @DgsMutation
     public String likePost(@InputArgument LikeInput likeInput) {
         return likeService.likePost(likeInput);
     }
@@ -28,12 +28,12 @@ public class LikeDataFetcher {
         return likeService.unLikePost(likeInput);
     }
 
-    @DgsData(parentType = DgsConstants.QUERY.TYPE_NAME, field = DgsConstants.QUERY.IsPostLiked)
+    @DgsQuery
     public boolean isPostLiked(@InputArgument LikeInput likeInput) {
         return likeService.isPostLiked(likeInput);
     }
 
-    @DgsData(parentType = DgsConstants.POST.TYPE_NAME, field = DgsConstants.POST.TotalLikes)
+    @DgsData(parentType = DgsConstants.POST.TYPE_NAME)
     public Integer totalLikes(DgsDataFetchingEnvironment dfe) {
         Post post = dfe.getSource();
         return likeService.getTotalLikes(post.getId());

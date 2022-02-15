@@ -1,9 +1,6 @@
 package io.wakelesstuna.postdgs.datafetchers;
 
-import com.netflix.graphql.dgs.DgsComponent;
-import com.netflix.graphql.dgs.DgsData;
-import com.netflix.graphql.dgs.DgsDataFetchingEnvironment;
-import com.netflix.graphql.dgs.InputArgument;
+import com.netflix.graphql.dgs.*;
 import graphql.relay.Connection;
 import io.wakelesstuna.post.generated.DgsConstants;
 import io.wakelesstuna.post.generated.types.CreatePostInput;
@@ -28,30 +25,30 @@ public class PostDataFetcher {
 
     private final PostService postService;
 
-    @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, field = DgsConstants.MUTATION.CreatePost)
+    @DgsMutation
     public Post createPost(@InputArgument CreatePostInput createPostInput, DgsDataFetchingEnvironment dfe) {
         MultipartFile file = dfe.getArgument("input");
         return postService.createPost(createPostInput, file);
     }
 
-    @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, field = DgsConstants.MUTATION.DeletePost)
+    @DgsMutation
     public Boolean deletePost(@InputArgument PostInput postInput) {
         return postService.deletePost(postInput);
     }
 
-    @DgsData(parentType = DgsConstants.QUERY.TYPE_NAME, field = DgsConstants.QUERY.Posts)
+    @DgsQuery
     public List<Post> posts(@InputArgument PostFilter postFilter) {
         if (postFilter != null) return postService.getPosts(postFilter);
         return postService.getPosts();
     }
 
-    @DgsData(parentType = DgsConstants.QUERY.TYPE_NAME, field = DgsConstants.QUERY.Post)
+    @DgsQuery
     public Post post(@InputArgument UUID postId) {
         return postService.getPost(postId);
     }
 
-    @DgsData(parentType = DgsConstants.QUERY.TYPE_NAME, field = DgsConstants.QUERY.PaginationPosts)
-    public Connection<Post> paginatonPost(@InputArgument Integer first, @InputArgument String after) {
+    @DgsQuery
+    public Connection<Post> paginationPosts(@InputArgument Integer first, @InputArgument String after) {
         return postService.getPaginationPost(first, after);
     }
 }
