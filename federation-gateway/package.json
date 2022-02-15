@@ -7,11 +7,19 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": " node index.js"
   },
+  "keywords": [
+    "example",
+    "heroku"
+  ],
   "author": "io.wakelesstuna",
   "license": "ISC",
   "dependencies": {
     "@apollo/gateway": "^0.45.0",
     "apollo-server": "^3.5.0",
     "graphql": "^15.8.0"
-  }
+  },
+  "engines": {
+    "node": "16.13.2"
+  },
+  "type": "module"
 }
